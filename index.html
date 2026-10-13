@@ -16,19 +16,23 @@
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --danger: #ef4444;
+      --text-muted: #475569;
+      --border: #cbd5e1;
+      --border-light: #e2e8f0;
+      --danger: #dc2626;
       --danger-bg: #fef2f2;
-      --warning: #f59e0b;
+      --danger-text: #991b1b;
+      --warning: #d97706;
       --warning-bg: #fffbeb;
-      --success: #10b981;
+      --warning-text: #92400e;
+      --success: #059669;
       --success-bg: #ecfdf5;
-      --info: #3b82f6;
-      --purple: #8b5cf6;
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --success-text: #065f46;
+      --info: #0284c7;
+      --purple: #7c3aed;
+      --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.08);
       --radius: 12px;
       --radius-sm: 8px;
     }
@@ -36,33 +40,33 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
     
-    /* Top Header */
+    /* Top Header - Streamlined Clinical Bar */
     header.app-header {
       background: #ffffff;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid var(--border-light);
       position: sticky;
       top: 0;
       z-index: 50;
       box-shadow: var(--shadow-sm);
     }
     .header-inner {
-      max-width: 1380px;
+      max-width: 1440px;
       margin: 0 auto;
-      padding: 10px 20px;
+      padding: 10px 24px;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 16px;
     }
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-shrink: 0;
     }
     .brand-logo {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       background: linear-gradient(135deg, #0d9488, #0f766e);
       border-radius: 10px;
       display: flex;
@@ -70,34 +74,40 @@
       justify-content: center;
       color: white;
       font-weight: 800;
-      font-size: 20px;
-      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+      font-size: 22px;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.35);
     }
     .brand-title {
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text);
+      letter-spacing: -0.2px;
       line-height: 1.2;
     }
     .brand-sub {
       font-size: 12px;
       color: var(--primary);
-      font-weight: 600;
-      letter-spacing: 0.3px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
     }
     
     .nav-tabs {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       background: #f1f5f9;
       padding: 4px;
       border-radius: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      flex-shrink: 1;
     }
+    .nav-tabs::-webkit-scrollbar { display: none; }
     .nav-tab {
-      padding: 8px 13px;
+      padding: 8px 14px;
       border-radius: 8px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-muted);
       cursor: pointer;
       border: none;
@@ -105,12 +115,13 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      white-space: nowrap;
       transition: all 0.15s ease;
     }
     .nav-tab.active {
       background: #ffffff;
       color: var(--primary-dark);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     }
     .nav-tab:hover:not(.active) {
       color: var(--text);
@@ -121,21 +132,22 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-shrink: 0;
     }
     .dept-select-wrap {
       display: flex;
       align-items: center;
       gap: 6px;
       background: #f8fafc;
-      padding: 5px 10px;
-      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border: 1.5px solid var(--border);
       border-radius: 8px;
       font-size: 12px;
     }
     .dept-select {
       border: none;
       background: transparent;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
       outline: none;
       cursor: pointer;
@@ -144,61 +156,76 @@
       background: var(--primary);
       color: white;
       border: none;
-      padding: 8px 14px;
+      padding: 9px 16px;
       border-radius: 8px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.25);
-      transition: background 0.15s;
+      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.3);
+      transition: all 0.15s;
     }
-    .btn-new-eval:hover { background: var(--primary-dark); }
+    .btn-new-eval:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
 
     /* User Profile Chip in Header */
     .user-profile-chip {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 4px 8px 4px 10px;
+      padding: 4px 10px 4px 6px;
       background: #f8fafc;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: 99px;
       font-size: 12px;
     }
     .user-avatar {
-      width: 26px;
-      height: 26px;
-      background: #0f766e;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
       color: white;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 11px;
     }
     .user-info-text {
       display: flex;
       flex-direction: column;
-      line-height: 1.1;
+      line-height: 1.15;
     }
-    .user-name-tag { font-weight: 700; color: var(--text); }
-    .user-role-tag { font-size: 10px; color: var(--primary); font-weight: 600; }
+    .user-name-tag { font-weight: 800; color: var(--text); font-size: 12px; }
+    .user-role-tag { font-size: 10px; color: var(--primary); font-weight: 700; }
     .btn-logout {
       background: #fee2e2;
-      color: #b91c1c;
-      border: none;
-      padding: 4px 8px;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+      padding: 4px 10px;
       border-radius: 6px;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.15s;
     }
     .btn-logout:hover { background: #fecaca; }
+
+    @media (max-width: 1150px) {
+      .header-inner {
+        flex-wrap: wrap;
+        padding: 10px 16px;
+      }
+      .nav-tabs {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
 
     /* Main Container */
     main.app-main {
@@ -236,23 +263,25 @@
       justify-content: space-between;
     }
 
-    /* Badge & Risk Tags */
+    /* Badge & Risk Tags - High Contrast Clinical Badges */
     .risk-badge {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       padding: 4px 10px;
       border-radius: 9999px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       line-height: 1.2;
+      border-width: 1.5px;
+      border-style: solid;
     }
-    .risk-badge.danger { background: var(--danger-bg); color: #b91c1c; border: 1px solid #fca5a5; }
-    .risk-badge.warning { background: var(--warning-bg); color: #b45309; border: 1px solid #fcd34d; }
-    .risk-badge.success { background: var(--success-bg); color: #047857; border: 1px solid #6ee7b7; }
-    .risk-badge.info { background: #eff6ff; color: #1d4ed8; border: 1px solid #93c5fd; }
-    .risk-badge.purple { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
-    .risk-badge.neutral { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .risk-badge.danger { background: var(--danger-bg); color: var(--danger-text); border-color: #f87171; }
+    .risk-badge.warning { background: var(--warning-bg); color: var(--warning-text); border-color: #fbbf24; }
+    .risk-badge.success { background: var(--success-bg); color: var(--success-text); border-color: #34d399; }
+    .risk-badge.info { background: #eff6ff; color: #0369a1; border-color: #7dd3fc; }
+    .risk-badge.purple { background: #f3e8ff; color: #6b21a8; border-color: #c084fc; }
+    .risk-badge.neutral { background: #f1f5f9; color: #334155; border-color: #cbd5e1; }
 
     /* DASHBOARD STYLES */
     .kpi-grid {
@@ -300,47 +329,98 @@
 
     .bed-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 14px;
     }
     .bed-item {
-      background: #f8fafc;
-      border: 2px solid var(--border);
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-left: 6px solid #cbd5e1;
       border-radius: 12px;
-      padding: 12px 10px;
-      text-align: center;
+      padding: 12px 14px;
+      text-align: left;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 104px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .bed-item:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow);
-      border-color: var(--primary-light);
+      border-color: var(--primary);
     }
     .bed-item.active-selected {
-      border-color: var(--primary);
-      background: var(--primary-bg);
-      box-shadow: 0 0 0 2px var(--primary-light);
+      border-color: var(--primary) !important;
+      background: #f0fdfa !important;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.35), var(--shadow) !important;
     }
-    .bed-number { font-size: 16px; font-weight: 800; color: var(--text); }
-    .bed-patient { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 4px 0 6px 0; font-weight: 500; }
+    .bed-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .bed-number { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+    .bed-badge-mini {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .bed-badge-mini.danger { background: #fee2e2; color: #991b1b; }
+    .bed-badge-mini.warning { background: #fef3c7; color: #92400e; }
+    .bed-badge-mini.success { background: #d1fae5; color: #065f46; }
+    .bed-badge-mini.neutral { background: #e2e8f0; color: #475569; }
+
+    .bed-patient {
+      font-size: 13px;
+      color: #1e293b;
+      line-height: 1.3;
+      margin: 6px 0 4px 0;
+      font-weight: 700;
+      min-height: 34px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .bed-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dashed #e2e8f0;
+      padding-top: 4px;
+      margin-top: 2px;
+    }
     
-    .bed-status-indicator {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin: 0 auto;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    .bed-item.status-danger {
+      border-left-color: var(--danger);
+      border-color: #fca5a5;
+      background: #fffafa;
     }
-    .bed-item.status-danger { border-color: #fca5a5; background: #fff5f5; }
-    .bed-item.status-danger .bed-status-indicator { background: var(--danger); box-shadow: 0 0 6px rgba(239, 68, 68, 0.5); }
-    .bed-item.status-warning { border-color: #fde68a; background: #fffdf5; }
-    .bed-item.status-warning .bed-status-indicator { background: var(--warning); box-shadow: 0 0 6px rgba(245, 158, 11, 0.5); }
-    .bed-item.status-safe { border-color: #a7f3d0; background: #f6fef9; }
-    .bed-item.status-safe .bed-status-indicator { background: var(--success); }
-    .bed-item.status-empty { opacity: 0.55; border-style: dashed; }
-    .bed-item.status-empty .bed-status-indicator { background: #94a3b8; }
+    .bed-item.status-warning {
+      border-left-color: var(--warning);
+      border-color: #fde68a;
+      background: #fffdf7;
+    }
+    .bed-item.status-safe {
+      border-left-color: var(--success);
+      border-color: #a7f3d0;
+      background: #fcfffd;
+    }
+    .bed-item.status-empty {
+      opacity: 0.6;
+      border-style: dashed;
+      border-left-color: #94a3b8;
+    }
 
     .bed-map-legend {
       display: flex;
@@ -458,49 +538,83 @@
       box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.15);
     }
 
-    /* SCALE TABS & CARDS */
+    /* SCALE STEPPER & CARDS (Unified Clinical Stepper) */
     .scales-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border-light);
+    }
+    @media (max-width: 860px) {
+      .scales-tabs { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .scales-tabs { grid-template-columns: 1fr; }
     }
     .scale-tab-btn {
-      padding: 10px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
       background: #f8fafc;
       font-size: 13px;
       font-weight: 700;
       color: var(--text-muted);
       cursor: pointer;
       display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.15s;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .scale-tab-btn:hover {
+      border-color: var(--primary-light);
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
     .scale-tab-btn.active {
-      background: var(--primary-bg);
+      background: #f0fdfa;
       border-color: var(--primary);
       color: var(--primary-dark);
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.2), 0 2px 6px rgba(15, 118, 110, 0.15);
+    }
+    .scale-tab-btn.completed {
+      border-color: #34d399;
+      background: #f0fdf4;
+    }
+    .scale-tab-btn-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .scale-step-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .scale-tab-btn .tab-score-badge {
       font-size: 11px;
-      padding: 2px 7px;
+      font-weight: 800;
+      padding: 2px 8px;
       border-radius: 6px;
       background: #e2e8f0;
-      color: var(--text);
+      color: #334155;
     }
     .scale-tab-btn.active .tab-score-badge {
       background: var(--primary);
       color: white;
     }
+    .scale-tab-btn.completed .tab-score-badge {
+      background: var(--success);
+      color: white;
+    }
 
     .scale-panel { display: none; }
-    .scale-panel.active { display: block; }
+    .scale-panel.active { display: block; animation: fadeIn 0.15s ease-out; }
 
     .question-block {
       background: #fafaf9;
@@ -529,8 +643,8 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
       border-radius: 8px;
       background: white;
       cursor: pointer;
@@ -542,13 +656,13 @@
       background: #f0fdfa;
       box-shadow: 0 0 0 1px var(--primary);
     }
-    .option-radio { margin-top: 3px; accent-color: var(--primary); }
+    .option-radio { margin-top: 3px; accent-color: var(--primary); width: 16px; height: 16px; }
     .option-content { flex: 1; }
-    .option-title { font-size: 13px; font-weight: 600; color: var(--text); }
+    .option-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.35; }
     .option-score-tag {
       font-size: 11px;
-      font-weight: 700;
-      padding: 2px 6px;
+      font-weight: 800;
+      padding: 2px 7px;
       border-radius: 4px;
       background: #e2e8f0;
       color: #334155;
@@ -557,65 +671,57 @@
     .option-action {
       margin-top: 4px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       color: #0d9488;
     }
 
-    /* Pain Slider Styling */
+    /* Streamlined Clinical Pain Card */
     .pain-slider-wrap {
       background: white;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
+      padding: 20px 24px;
       text-align: center;
+      box-shadow: var(--shadow-sm);
     }
     .pain-score-display {
-      font-size: 48px;
-      font-weight: 800;
+      font-size: 52px;
+      font-weight: 900;
       line-height: 1;
-      margin-bottom: 8px;
-    }
-    .pain-range-slider {
-      width: 100%;
-      height: 10px;
-      border-radius: 5px;
-      accent-color: var(--primary);
-      margin: 16px 0;
-      cursor: pointer;
-    }
-    .pain-ticks {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: -1px;
     }
     .pain-levels-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 18px;
+    }
+    @media (max-width: 680px) {
+      .pain-levels-grid { grid-template-columns: repeat(2, 1fr); }
     }
     .pain-level-box {
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 12px;
       font-weight: 700;
+      border: 1.5px solid transparent;
+      cursor: pointer;
       transition: transform 0.15s, box-shadow 0.15s;
     }
     .pain-level-box:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
     }
 
     .pain-num-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
       background: white;
-      font-weight: 700;
-      font-size: 14px;
+      font-weight: 800;
+      font-size: 16px;
       color: var(--text);
       cursor: pointer;
       transition: all 0.15s;
@@ -626,33 +732,89 @@
     .pain-num-btn:hover {
       border-color: var(--primary);
       background: #f0fdfa;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
     }
     .pain-num-btn.active {
       background: var(--primary);
       color: white;
       border-color: var(--primary);
-      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.35);
+      box-shadow: 0 3px 10px rgba(15, 118, 110, 0.4);
+      transform: scale(1.05);
     }
+
+    /* Stepper Next/Prev Navigation */
+    .scale-step-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1.5px dashed var(--border-light);
+    }
+    .btn-step-prev {
+      background: #f1f5f9;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-step-prev:hover { background: #e2e8f0; }
+    .btn-step-next {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.3);
+      transition: all 0.15s;
+    }
+    .btn-step-next:hover {
+      background: var(--primary-dark);
+      transform: translateX(2px);
+    }
+    .btn-step-save {
+      background: var(--success);
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35);
+    }
+    .btn-step-save:hover { background: #047857; }
 
     /* Sticky Footer Action Bar for Assessment */
     .form-action-bar {
       position: sticky;
       bottom: 0;
       background: white;
-      border-top: 1px solid var(--border);
+      border-top: 2px solid var(--border-light);
       padding: 14px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
       border-radius: 0 0 var(--radius) var(--radius);
       margin-top: 24px;
+      z-index: 40;
+    }
+    @media (max-width: 768px) {
+      .form-action-bar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+      }
     }
     .overall-assessment-preview {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
     .btn-save-eval {
       background: var(--primary);
@@ -668,7 +830,6 @@
       gap: 8px;
       box-shadow: 0 2px 6px rgba(15, 118, 110, 0.3);
       transition: background 0.15s;
-    }
     .btn-save-eval:hover { background: var(--primary-dark); }
     .btn-reset-form {
       background: #f1f5f9;
@@ -1222,98 +1383,147 @@
           </div>
         </div>
 
-        <!-- Scale Evaluation Tabs -->
-        <div class="form-section-title" style="margin-top:24px;">2. Nội dung Đánh giá 4 Thang điểm Lâm sàng</div>
+        <!-- Scale Evaluation Tabs (Unified 4-Step Stepper) -->
+        <div class="form-section-title" style="margin-top:24px;">2. Nội dung Đánh giá 4 Thang điểm Lâm sàng (Luồng liên tục 4 bước)</div>
         
         <div class="scales-tabs">
-          <button type="button" class="scale-tab-btn active" data-scale="braden" onclick="switchScaleTab('braden')">
-            <span>Loét tì đè (Braden)</span>
-            <span class="tab-score-badge" id="tab-score-braden">—</span>
+          <button type="button" class="scale-tab-btn active" id="stepper-tab-braden" data-scale="braden" onclick="switchScaleTab('braden')">
+            <div class="scale-tab-btn-header">
+              <span class="scale-step-num">Bước 1</span>
+              <span class="tab-score-badge" id="tab-score-braden">—</span>
+            </div>
+            <span style="font-size:13px; font-weight:700;">Loét tì đè (Braden)</span>
           </button>
-          <button type="button" class="scale-tab-btn" data-scale="pain" onclick="switchScaleTab('pain')">
-            <span>Đau (NRS / VAS)</span>
-            <span class="tab-score-badge" id="tab-score-pain">—</span>
+          <button type="button" class="scale-tab-btn" id="stepper-tab-pain" data-scale="pain" onclick="switchScaleTab('pain')">
+            <div class="scale-tab-btn-header">
+              <span class="scale-step-num">Bước 2</span>
+              <span class="tab-score-badge" id="tab-score-pain">—</span>
+            </div>
+            <span style="font-size:13px; font-weight:700;">Đau (NRS / VAS)</span>
           </button>
-          <button type="button" class="scale-tab-btn" data-scale="vip" onclick="switchScaleTab('vip')">
-            <span>Viêm tĩnh mạch (VIP)</span>
-            <span class="tab-score-badge" id="tab-score-vip">—</span>
+          <button type="button" class="scale-tab-btn" id="stepper-tab-vip" data-scale="vip" onclick="switchScaleTab('vip')">
+            <div class="scale-tab-btn-header">
+              <span class="scale-step-num">Bước 3</span>
+              <span class="tab-score-badge" id="tab-score-vip">—</span>
+            </div>
+            <span style="font-size:13px; font-weight:700;">Viêm tĩnh mạch (VIP)</span>
           </button>
-          <button type="button" class="scale-tab-btn" data-scale="morse" onclick="switchScaleTab('morse')">
-            <span>Té ngã (Morse)</span>
-            <span class="tab-score-badge" id="tab-score-morse">—</span>
+          <button type="button" class="scale-tab-btn" id="stepper-tab-morse" data-scale="morse" onclick="switchScaleTab('morse')">
+            <div class="scale-tab-btn-header">
+              <span class="scale-step-num">Bước 4</span>
+              <span class="tab-score-badge" id="tab-score-morse">—</span>
+            </div>
+            <span style="font-size:13px; font-weight:700;">Té ngã (Morse)</span>
           </button>
         </div>
 
         <!-- Tab 1: Braden Scale Panel -->
         <div id="panel-scale-braden" class="scale-panel active">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
             <div style="font-size:13px; color:var(--text-muted);">Thang 6–23 điểm. Điểm càng thấp nguy cơ càng cao: ≤9 Rất cao · 10–12 Cao · 13–14 Trung bình · 15–18 Nhẹ · 19–23 Không nguy cơ.</div>
             <div id="braden-risk-badge-live" class="risk-badge">Chưa đánh giá (0/6 tiêu chí)</div>
           </div>
           <div id="bradenQuestionsContainer">
             <!-- Questions rendered by JS -->
           </div>
+          <div class="scale-step-nav">
+            <span style="font-size:12px; color:var(--text-muted);">Đã xong phần Braden? Chuyển sang bước tiếp theo:</span>
+            <button type="button" class="btn-step-next" onclick="switchScaleTab('pain')">
+              Tiếp theo: Đánh giá Đau (NRS / VAS) →
+            </button>
+          </div>
         </div>
 
-        <!-- Tab 2: Pain (NRS/VAS) Panel -->
+        <!-- Tab 2: Pain (NRS/VAS) Panel - Streamlined Ergonomic View -->
         <div id="panel-scale-pain" class="scale-panel">
           <div class="pain-slider-wrap">
-            <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px;">Thang điểm đánh giá đau (Numeric Rating Scale - NRS / VAS)</div>
-            <div style="font-size:12px; color:var(--text-muted);">Người bệnh tự cho điểm mức độ đau từ 0 (Không đau) đến 10 (Đau dữ dội nhất tưởng tượng được).</div>
+            <div style="font-size:15px; font-weight:800; color:var(--text); margin-bottom:4px;">Thang điểm đánh giá đau (Numeric Rating Scale - NRS / VAS)</div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">Hỏi người bệnh mức độ đau từ 0 (Không đau) đến 10 (Đau dữ dội nhất). Chạm trực tiếp vào số tương ứng:</div>
             
-            <div style="margin:16px 0;">
+            <div style="margin-bottom:16px;">
               <div class="pain-score-display" id="painScoreDisplay" style="color:var(--text-muted);">—</div>
-              <div id="painRiskBadgeLive" class="risk-badge">Chưa đánh giá</div>
+              <div id="painRiskBadgeLive" class="risk-badge" style="font-size:13px;">Chưa đánh giá</div>
             </div>
 
-            <div style="margin-bottom:8px; font-size:13px; font-weight:600; color:var(--text);">Bấm chọn trực tiếp mức điểm đau (0 – 10):</div>
-            <div class="pain-btn-selector" id="painQuickButtons" style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:12px 0;">
+            <!-- Big tactile touch buttons 0..10 -->
+            <div class="pain-btn-selector" id="painQuickButtons" style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:16px 0;">
               <!-- 0..10 buttons generated by JS -->
             </div>
 
-            <div style="max-width:520px; margin:16px auto 8px auto;">
-              <input type="range" min="0" max="10" step="1" value="0" id="painSlider" class="pain-range-slider" oninput="onPainSliderChange(this.value)">
-              <div class="pain-ticks">
-                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+            <!-- Clinical Level Boxes with Visual Cues -->
+            <div class="pain-levels-grid">
+              <div class="pain-level-box" style="background:#ecfdf5; border-color:#a7f3d0; color:#065f46;" onclick="onPainSliderChange(0)">
+                <div style="font-size:16px; margin-bottom:2px;">😊 Mức 0</div>
+                <div>Không đau</div>
+              </div>
+              <div class="pain-level-box" style="background:#f0fdf4; border-color:#86efac; color:#15803d;" onclick="onPainSliderChange(2)">
+                <div style="font-size:16px; margin-bottom:2px;">🙂 1 – 3</div>
+                <div>Đau nhẹ (chịu được)</div>
+              </div>
+              <div class="pain-level-box" style="background:#fffbeb; border-color:#fde68a; color:#b45309;" onclick="onPainSliderChange(5)">
+                <div style="font-size:16px; margin-bottom:2px;">😐 4 – 6</div>
+                <div>Đau vừa (ảnh hưởng ngủ)</div>
+              </div>
+              <div class="pain-level-box" style="background:#fef2f2; border-color:#fca5a5; color:#dc2626;" onclick="onPainSliderChange(8)">
+                <div style="font-size:16px; margin-bottom:2px;">😫 7 – 10 🚨</div>
+                <div>Đau nặng / dữ dội</div>
               </div>
             </div>
+          </div>
 
-            <div class="pain-levels-grid">
-              <div class="pain-level-box" style="background:#ecfdf5; color:#065f46; cursor:pointer;" onclick="onPainSliderChange(0)">0: Không đau</div>
-              <div class="pain-level-box" style="background:#f7fee7; color:#3f6212; cursor:pointer;" onclick="onPainSliderChange(2)">1 – 3: Đau nhẹ</div>
-              <div class="pain-level-box" style="background:#fffbeb; color:#b45309; cursor:pointer;" onclick="onPainSliderChange(5)">4 – 6: Đau vừa</div>
-              <div class="pain-level-box" style="background:#fef2f2; color:#b91c1c; cursor:pointer;" onclick="onPainSliderChange(8)">7 – 10: Đau nặng 🚨</div>
-            </div>
+          <div class="scale-step-nav">
+            <button type="button" class="btn-step-prev" onclick="switchScaleTab('braden')">
+              ← Quay lại Braden
+            </button>
+            <button type="button" class="btn-step-next" onclick="switchScaleTab('vip')">
+              Tiếp theo: Viêm tĩnh mạch (VIP) →
+            </button>
           </div>
         </div>
 
         <!-- Tab 3: VIP Score Panel -->
         <div id="panel-scale-vip" class="scale-panel">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
             <div style="font-size:13px; color:var(--text-muted);">Quan sát vị trí luồn catheter ngoại vi và sờ nắn. Chọn 1 mức điểm phù hợp nhất. VIP ≥ 2 cần rút/đổi catheter!</div>
             <div id="vip-risk-badge-live" class="risk-badge">Chưa đánh giá</div>
           </div>
           <div id="vipOptionsContainer" class="options-grid">
             <!-- VIP options rendered by JS -->
           </div>
+          <div class="scale-step-nav">
+            <button type="button" class="btn-step-prev" onclick="switchScaleTab('pain')">
+              ← Quay lại Đau (NRS)
+            </button>
+            <button type="button" class="btn-step-next" onclick="switchScaleTab('morse')">
+              Tiếp theo: Té ngã (Morse) →
+            </button>
+          </div>
         </div>
 
         <!-- Tab 4: Morse Fall Scale Panel -->
         <div id="panel-scale-morse" class="scale-panel">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
             <div style="font-size:13px; color:var(--text-muted);">Thang 0–125 điểm. Điểm càng cao nguy cơ càng cao: 0–24 Nguy cơ thấp · 25–44 Trung bình · ≥45 Nguy cơ cao.</div>
             <div id="morse-risk-badge-live" class="risk-badge">Chưa đánh giá (0/6 tiêu chí)</div>
           </div>
           <div id="morseQuestionsContainer">
             <!-- Morse questions rendered by JS -->
           </div>
+          <div class="scale-step-nav">
+            <button type="button" class="btn-step-prev" onclick="switchScaleTab('vip')">
+              ← Quay lại VIP
+            </button>
+            <button type="button" class="btn-step-next btn-step-save" onclick="saveAssessmentForm()">
+              ✓ Hoàn tất & Lưu Đánh Giá Bệnh Nhân
+            </button>
+          </div>
         </div>
 
-        <!-- Sticky Footer for Quick Save -->
+        <!-- Sticky Footer for Quick Save & Realtime Composite Warning -->
         <div class="form-action-bar">
           <div class="overall-assessment-preview">
-            <span style="font-size:13px; font-weight:700; color:var(--text-muted);">TỔNG QUAN PHÂN TẦNG:</span>
-            <span id="form-overall-badge-live" class="risk-badge">Chưa hoàn tất (0/4 thang điểm)</span>
+            <span style="font-size:13px; font-weight:800; color:var(--text); text-transform:uppercase; letter-spacing:0.3px;">PHÂN TẦNG CẢNH BÁO N-EWS:</span>
+            <span id="form-overall-badge-live" class="risk-badge" style="font-size:13px;">Chưa hoàn tất (0/4 thang điểm)</span>
           </div>
           <div style="display:flex; gap:10px;">
             <button type="button" class="btn-reset-form" onclick="switchView('dashboard')">Quay lại Dashboard</button>
@@ -2214,10 +2424,27 @@
         const risk = calcOverallPatientRisk(bed);
         const bedDiv = document.createElement("div");
         bedDiv.className = `bed-item ${risk.statusClass} ${bed.id === currentSelectedBedId ? 'active-selected' : ''}`;
+
+        let miniBadgeText = "ỔN ĐỊNH";
+        let miniBadgeClass = "success";
+        if (risk.statusClass === "status-danger") {
+          miniBadgeText = "NGUY CƠ";
+          miniBadgeClass = "danger";
+        } else if (risk.statusClass === "status-warning") {
+          miniBadgeText = "THEO DÕI";
+          miniBadgeClass = "warning";
+        }
+
         bedDiv.innerHTML = `
-          <div class="bed-status-indicator"></div>
-          <div class="bed-number" style="margin-top:6px;">G${String(bed.id).padStart(2, '0')}</div>
+          <div class="bed-item-header">
+            <span class="bed-number">G.${String(bed.id).padStart(2, '0')}</span>
+            <span class="bed-badge-mini ${miniBadgeClass}">${miniBadgeText}</span>
+          </div>
           <div class="bed-patient" title="${bed.name}">${bed.name}</div>
+          <div class="bed-meta">
+            <span>${bed.age || '—'} · ${bed.gender || '—'}</span>
+            <span style="font-weight:700; color:var(--primary);">${bed.code || ''}</span>
+          </div>
         `;
         bedDiv.onclick = () => selectBedOnDashboard(bed.id);
         gridContainer.appendChild(bedDiv);
@@ -2504,6 +2731,11 @@
     function switchScaleTab(scaleName) {
       document.querySelectorAll(".scale-tab-btn").forEach(b => b.classList.toggle("active", b.getAttribute("data-scale") === scaleName));
       document.querySelectorAll(".scale-panel").forEach(p => p.classList.toggle("active", p.id === "panel-scale-" + scaleName));
+      
+      const panel = document.getElementById("panel-scale-" + scaleName);
+      if (panel) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
 
     function selectBradenOption(key, val) {
@@ -2555,8 +2787,6 @@
 
     function onPainSliderChange(val) {
       formState.pain = parseInt(val);
-      const slider = document.getElementById("painSlider");
-      if (slider) slider.value = val;
       recalcFormScores();
     }
 
@@ -2564,32 +2794,38 @@
       // 1. Braden
       const bradenAnswered = BRADEN_ITEMS.filter(i => formState.braden && formState.braden[i.key] !== null && formState.braden[i.key] !== undefined).length;
       const tabBraden = document.getElementById("tab-score-braden");
+      const tabBradenBtn = document.getElementById("stepper-tab-braden");
       const bBadge = document.getElementById("braden-risk-badge-live");
       let bradenTotal = 0;
 
       if (bradenAnswered === 0) {
         tabBraden.innerText = "—";
+        if (tabBradenBtn) tabBradenBtn.classList.remove("completed");
         bBadge.className = "risk-badge";
         bBadge.innerText = "Chưa đánh giá (0/6 tiêu chí)";
       } else if (bradenAnswered < BRADEN_ITEMS.length) {
         tabBraden.innerText = `${bradenAnswered}/6`;
+        if (tabBradenBtn) tabBradenBtn.classList.remove("completed");
         bBadge.className = "risk-badge warning";
         bBadge.innerText = `Đang đánh giá (${bradenAnswered}/6 tiêu chí)`;
       } else {
         bradenTotal = Object.values(formState.braden).reduce((a, b) => a + Number(b || 0), 0);
         const bRisk = calcBradenRisk(bradenTotal);
-        tabBraden.innerText = `${bradenTotal}đ`;
+        tabBraden.innerText = `${bradenTotal}đ ✓`;
+        if (tabBradenBtn) tabBradenBtn.classList.add("completed");
         bBadge.className = `risk-badge ${bRisk.level}`;
         bBadge.innerText = `${bradenTotal} điểm — ${bRisk.label}`;
       }
 
       // 2. Pain
       const tabPain = document.getElementById("tab-score-pain");
+      const tabPainBtn = document.getElementById("stepper-tab-pain");
       const painDisplay = document.getElementById("painScoreDisplay");
       const pBadge = document.getElementById("painRiskBadgeLive");
 
       if (formState.pain === null || formState.pain === undefined) {
         tabPain.innerText = "—";
+        if (tabPainBtn) tabPainBtn.classList.remove("completed");
         painDisplay.innerText = "—";
         painDisplay.style.color = "var(--text-muted)";
         pBadge.className = "risk-badge";
@@ -2598,7 +2834,8 @@
       } else {
         const painVal = formState.pain;
         const pRisk = calcPainRisk(painVal);
-        tabPain.innerText = `${painVal}/10`;
+        tabPain.innerText = `${painVal}/10 ✓`;
+        if (tabPainBtn) tabPainBtn.classList.add("completed");
         painDisplay.innerText = painVal;
         painDisplay.style.color = painVal >= 7 ? "var(--danger)" : painVal >= 4 ? "var(--warning)" : "var(--success)";
         pBadge.className = `risk-badge ${pRisk.level}`;
@@ -2610,16 +2847,19 @@
 
       // 3. VIP
       const tabVip = document.getElementById("tab-score-vip");
+      const tabVipBtn = document.getElementById("stepper-tab-vip");
       const vBadge = document.getElementById("vip-risk-badge-live");
 
       if (formState.vip === null || formState.vip === undefined) {
         tabVip.innerText = "—";
+        if (tabVipBtn) tabVipBtn.classList.remove("completed");
         vBadge.className = "risk-badge";
         vBadge.innerText = "Chưa đánh giá";
       } else {
         const vipVal = formState.vip;
         const vRisk = calcVipRisk(vipVal);
-        tabVip.innerText = `VIP ${vipVal}`;
+        tabVip.innerText = `VIP ${vipVal} ✓`;
+        if (tabVipBtn) tabVipBtn.classList.add("completed");
         vBadge.className = `risk-badge ${vRisk.level}`;
         vBadge.innerText = `VIP ${vipVal} — ${vRisk.label}`;
       }
@@ -2627,21 +2867,25 @@
       // 4. Morse
       const morseAnswered = MORSE_ITEMS.filter(i => formState.morse && formState.morse[i.key] !== null && formState.morse[i.key] !== undefined).length;
       const tabMorse = document.getElementById("tab-score-morse");
+      const tabMorseBtn = document.getElementById("stepper-tab-morse");
       const mBadge = document.getElementById("morse-risk-badge-live");
       let morseTotal = 0;
 
       if (morseAnswered === 0) {
         tabMorse.innerText = "—";
+        if (tabMorseBtn) tabMorseBtn.classList.remove("completed");
         mBadge.className = "risk-badge";
         mBadge.innerText = "Chưa đánh giá (0/6 tiêu chí)";
       } else if (morseAnswered < MORSE_ITEMS.length) {
         tabMorse.innerText = `${morseAnswered}/6`;
+        if (tabMorseBtn) tabMorseBtn.classList.remove("completed");
         mBadge.className = "risk-badge warning";
         mBadge.innerText = `Đang đánh giá (${morseAnswered}/6 tiêu chí)`;
       } else {
         morseTotal = Object.values(formState.morse).reduce((a, b) => a + Number(b || 0), 0);
         const mRisk = calcMorseRisk(morseTotal);
-        tabMorse.innerText = `${morseTotal}đ`;
+        tabMorse.innerText = `${morseTotal}đ ✓`;
+        if (tabMorseBtn) tabMorseBtn.classList.add("completed");
         mBadge.className = `risk-badge ${mRisk.level}`;
         mBadge.innerText = `${morseTotal} điểm — ${mRisk.label}`;
       }
@@ -2655,12 +2899,12 @@
 
       if (totalCompletedScales < 4) {
         liveBadge.className = "risk-badge";
-        liveBadge.innerText = `Chưa hoàn tất (${totalCompletedScales}/4 thang điểm)`;
+        liveBadge.innerText = `Đang đánh giá (${totalCompletedScales}/4 thang hoàn tất)`;
       } else {
         const mockBed = { braden: bradenTotal, pain: formState.pain, vip: formState.vip, morse: morseTotal };
         const overall = calcOverallPatientRisk(mockBed);
         liveBadge.className = `risk-badge ${overall.badgeClass}`;
-        liveBadge.innerText = overall.label;
+        liveBadge.innerText = `ĐÃ HOÀN TẤT 4/4 — ${overall.label.toUpperCase()}`;
       }
     }
 
