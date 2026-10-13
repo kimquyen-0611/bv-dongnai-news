@@ -1,0 +1,3206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>N-EWS · Hệ thống Cảnh báo sớm & Đánh giá 4 Thang điểm Điều dưỡng | BVĐK Đồng Nai</title>
+  <style>
+    :root {
+      --primary: #0f766e;
+      --primary-light: #14b8a6;
+      --primary-dark: #115e59;
+      --primary-bg: #f0fdfa;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --danger-bg: #fef2f2;
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
+      --success: #10b981;
+      --success-bg: #ecfdf5;
+      --info: #3b82f6;
+      --purple: #8b5cf6;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    /* Top Header */
+    header.app-header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+    .header-inner {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #0d9488, #0f766e);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 20px;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+    }
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .nav-tab {
+      padding: 8px 13px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .nav-tab.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .nav-tab:hover:not(.active) {
+      color: var(--text);
+      background: #e2e8f0;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dept-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8fafc;
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    .dept-select {
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+    }
+    .btn-new-eval {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.25);
+      transition: background 0.15s;
+    }
+    .btn-new-eval:hover { background: var(--primary-dark); }
+
+    /* User Profile Chip in Header */
+    .user-profile-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 8px 4px 10px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      font-size: 12px;
+    }
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      background: #0f766e;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    .user-info-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .user-name-tag { font-weight: 700; color: var(--text); }
+    .user-role-tag { font-size: 10px; color: var(--primary); font-weight: 600; }
+    .btn-logout {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-logout:hover { background: #fecaca; }
+
+    /* Main Container */
+    main.app-main {
+      max-width: 1380px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .view-section { display: none; }
+    .view-section.active { display: block; animation: fadeIn 0.2s ease-in; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Common Card */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Badge & Risk Tags */
+    .risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .risk-badge.danger { background: var(--danger-bg); color: #b91c1c; border: 1px solid #fca5a5; }
+    .risk-badge.warning { background: var(--warning-bg); color: #b45309; border: 1px solid #fcd34d; }
+    .risk-badge.success { background: var(--success-bg); color: #047857; border: 1px solid #6ee7b7; }
+    .risk-badge.info { background: #eff6ff; color: #1d4ed8; border: 1px solid #93c5fd; }
+    .risk-badge.purple { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
+    .risk-badge.neutral { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+    /* DASHBOARD STYLES */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .kpi-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--primary);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .kpi-card.kpi-braden { border-left-color: #2563eb; }
+    .kpi-card.kpi-pain { border-left-color: #9333ea; }
+    .kpi-card.kpi-vip { border-left-color: #0d9488; }
+    .kpi-card.kpi-morse { border-left-color: #ea580c; }
+
+    .kpi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .kpi-title { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    .kpi-value { font-size: 28px; font-weight: 800; color: var(--text); line-height: 1.1; }
+    .kpi-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; display: flex; align-items: center; justify-content: space-between; }
+    .kpi-progress-bg { width: 100%; height: 6px; background: #e2e8f0; border-radius: 99px; margin-top: 10px; overflow: hidden; }
+    .kpi-progress-bar { height: 100%; border-radius: 99px; transition: width 0.3s ease; }
+
+    /* BED GRID LAYOUT */
+    .dashboard-main-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 1024px) {
+      .dashboard-main-row { grid-template-columns: 1fr; }
+    }
+
+    .bed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+      gap: 12px;
+    }
+    .bed-item {
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .bed-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: var(--primary-light);
+    }
+    .bed-item.active-selected {
+      border-color: var(--primary);
+      background: var(--primary-bg);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+    .bed-number { font-size: 16px; font-weight: 800; color: var(--text); }
+    .bed-patient { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 4px 0 6px 0; font-weight: 500; }
+    
+    .bed-status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin: 0 auto;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    }
+    .bed-item.status-danger { border-color: #fca5a5; background: #fff5f5; }
+    .bed-item.status-danger .bed-status-indicator { background: var(--danger); box-shadow: 0 0 6px rgba(239, 68, 68, 0.5); }
+    .bed-item.status-warning { border-color: #fde68a; background: #fffdf5; }
+    .bed-item.status-warning .bed-status-indicator { background: var(--warning); box-shadow: 0 0 6px rgba(245, 158, 11, 0.5); }
+    .bed-item.status-safe { border-color: #a7f3d0; background: #f6fef9; }
+    .bed-item.status-safe .bed-status-indicator { background: var(--success); }
+    .bed-item.status-empty { opacity: 0.55; border-style: dashed; }
+    .bed-item.status-empty .bed-status-indicator { background: #94a3b8; }
+
+    .bed-map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* BED DETAIL PANEL */
+    .bed-detail-panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .bed-detail-header {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .bed-metric-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13px;
+    }
+    .metric-name { font-weight: 600; color: var(--text); }
+    .metric-value-wrap { display: flex; align-items: center; gap: 8px; }
+
+    /* PRIORITY TABLE */
+    .data-table-wrap {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    table.data-table th {
+      background: #f8fafc;
+      padding: 10px 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    table.data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    table.data-table tr:hover { background: #f8fafc; }
+
+    /* TREND CHART SECTION */
+    .chart-container {
+      width: 100%;
+      height: 220px;
+      position: relative;
+    }
+
+    /* ASSESSMENT FORM STYLES */
+    .form-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .input-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .input-group input, .input-group select {
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      background: white;
+      outline: none;
+      transition: border 0.15s;
+    }
+    .input-group input:focus, .input-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.15);
+    }
+
+    /* SCALE TABS & CARDS */
+    .scales-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .scale-tab-btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .scale-tab-btn.active {
+      background: var(--primary-bg);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      box-shadow: var(--shadow-sm);
+    }
+    .scale-tab-btn .tab-score-badge {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: #e2e8f0;
+      color: var(--text);
+    }
+    .scale-tab-btn.active .tab-score-badge {
+      background: var(--primary);
+      color: white;
+    }
+
+    .scale-panel { display: none; }
+    .scale-panel.active { display: block; }
+
+    .question-block {
+      background: #fafaf9;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .question-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .question-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .option-item:hover { border-color: var(--primary-light); background: #fdfdfd; }
+    .option-item.selected {
+      border-color: var(--primary);
+      background: #f0fdfa;
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+    .option-radio { margin-top: 3px; accent-color: var(--primary); }
+    .option-content { flex: 1; }
+    .option-title { font-size: 13px; font-weight: 600; color: var(--text); }
+    .option-score-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      color: #334155;
+      float: right;
+    }
+    .option-action {
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0d9488;
+    }
+
+    /* Pain Slider Styling */
+    .pain-slider-wrap {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    .pain-score-display {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .pain-range-slider {
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+      accent-color: var(--primary);
+      margin: 16px 0;
+      cursor: pointer;
+    }
+    .pain-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .pain-levels-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .pain-level-box {
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .pain-level-box:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .pain-num-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: white;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pain-num-btn:hover {
+      border-color: var(--primary);
+      background: #f0fdfa;
+      transform: translateY(-1px);
+    }
+    .pain-num-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(15, 118, 110, 0.35);
+    }
+
+    /* Sticky Footer Action Bar for Assessment */
+    .form-action-bar {
+      position: sticky;
+      bottom: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+      border-radius: 0 0 var(--radius) var(--radius);
+      margin-top: 24px;
+    }
+    .overall-assessment-preview {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .btn-save-eval {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.3);
+      transition: background 0.15s;
+    }
+    .btn-save-eval:hover { background: var(--primary-dark); }
+    .btn-reset-form {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ==================== LOGIN SCREEN STYLES ==================== */
+    .login-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #042f2e 0%, #0f766e 60%, #115e59 100%);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-box {
+      background: #ffffff;
+      border-radius: 20px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+    }
+    @media (max-width: 768px) {
+      .login-box { grid-template-columns: 1fr; }
+      .login-sidebar { display: none; }
+    }
+    .login-form-side {
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .login-sidebar {
+      background: #f8fafc;
+      border-left: 1px solid var(--border);
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .login-brand-logo {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #0d9488, #0f766e);
+      border-radius: 12px;
+      color: white;
+      font-weight: 900;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);
+    }
+    .login-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .login-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      margin-bottom: 24px;
+    }
+    .btn-login-submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 14px;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+      transition: background 0.15s;
+    }
+    .btn-login-submit:hover { background: var(--primary-dark); }
+    .quick-account-item {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .quick-account-item:hover {
+      border-color: var(--primary);
+      background: #f0fdfa;
+      transform: translateX(2px);
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #065f46; border-left: 5px solid #10b981; }
+
+    /* PRINT FRIENDLY / EXPORT MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+      display: none;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-dialog {
+      background: white;
+      border-radius: 16px;
+      max-width: 820px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    /* Print Paper styling */
+    @media print {
+      body { background: white; color: black; }
+      header.app-header, .nav-tabs, .btn-new-eval, .form-action-bar, .no-print, .login-overlay { display: none !important; }
+      .modal-overlay { position: static; background: none; padding: 0; display: block !important; }
+      .modal-dialog { box-shadow: none; border: none; max-width: 100%; padding: 0; }
+      .print-page { padding: 10mm; font-size: 12pt; line-height: 1.4; }
+      .print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
+      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+      table, th, td { border: 1px solid #000; }
+      th, td { padding: 6px 8px; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== GIAO DIỆN ĐĂNG NHẬP (LOGIN SCREEN) ==================== -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+      <!-- Cột Trái: Form Đăng nhập -->
+      <div class="login-form-side">
+        <div class="login-brand-logo">N</div>
+        <div class="login-title">BỆNH VIỆN ĐA KHOA ĐỒNG NAI</div>
+        <div class="login-sub">Hệ thống N-EWS · Đánh giá & Giám sát 4 Thang điểm Điều dưỡng</div>
+
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+          <div class="input-group" style="margin-bottom:14px;">
+            <label>Tên đăng nhập (Username) *</label>
+            <input type="text" id="loginUsername" placeholder="Ví dụ: THUYPTT, QUYLTT, HOADT..." required autocomplete="username">
+          </div>
+          <div class="input-group" style="margin-bottom:10px;">
+            <label>Mật khẩu *</label>
+            <input type="password" id="loginPassword" placeholder="Nhập mật khẩu (Mặc định: 1)" required autocomplete="current-password">
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <label style="font-size:12px; color:var(--text-muted); display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" id="rememberMeCheck" checked> Ghi nhớ đăng nhập
+            </label>
+            <span style="font-size:11px; color:var(--primary); font-weight:600;">Mật khẩu ban đầu: 1</span>
+          </div>
+
+          <div id="loginErrorMessage" style="color:#b91c1c; font-size:12px; margin-bottom:10px; display:none;"></div>
+
+          <button type="submit" class="btn-login-submit">Đăng Nhập Vào Hệ Thống</button>
+        </form>
+
+        <div style="margin-top:24px; padding-top:16px; border-top:1px dashed var(--border); font-size:11px; color:var(--text-muted);">
+          🔒 Triển khai thí điểm (Pilot): Khoa Nội Thần kinh & Ban Điều dưỡng BVĐK Đồng Nai.
+        </div>
+      </div>
+
+      <!-- Cột Phải: Danh sách tài khoản Pilot nhanh (Theo file Excel) -->
+      <div class="login-sidebar">
+        <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; display:flex; align-items:center; justify-content:space-between;">
+          <span>Tài khoản Pilot Khoa Nội Thần kinh</span>
+          <span class="risk-badge info" style="font-size:10px;">7 Tài khoản</span>
+        </div>
+        <p style="font-size:11px; color:var(--text-muted); margin-bottom:14px;">
+          Bấm 1 chạm vào tài khoản bên dưới để tự động điền và đăng nhập trải nghiệm:
+        </p>
+
+        <div style="overflow-y:auto; flex:1; padding-right:4px;" id="quickLoginAccountList">
+          <!-- Rendered by JS from PILOT_ACCOUNTS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== APP HEADER ==================== -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo">N</div>
+        <div>
+          <div class="brand-title">BỆNH VIỆN ĐA KHOA ĐỒNG NAI</div>
+          <div class="brand-sub">Hệ thống N-EWS · Đánh giá & Giám sát 4 Thang điểm Điều dưỡng</div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" data-view="dashboard" onclick="switchView('dashboard')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          Dashboard Toàn khoa
+        </button>
+        <button class="nav-tab" data-view="assessment" onclick="onNavAssessmentClicked()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M9 14h6"/><path d="M9 18h6"/><path d="M9 10h6"/></svg>
+          Phiếu Đánh Giá
+        </button>
+        <button class="nav-tab" data-view="patients" onclick="switchView('patients')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Danh Sách & Lịch Sử
+        </button>
+        <button class="nav-tab" data-view="reports" onclick="switchView('reports')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          Xuất Báo Cáo
+        </button>
+        <button class="nav-tab" data-view="accounts" onclick="switchView('accounts')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Phân Quyền Pilot
+        </button>
+      </nav>
+
+      <!-- Department, User Profile & Quick Action -->
+      <div class="header-controls">
+        <div class="dept-select-wrap">
+          <label style="color:var(--text-muted);font-size:11px;">Khoa:</label>
+          <select id="currentDeptSelect" class="dept-select" onchange="onDepartmentChanged()">
+            <option value="Khoa Nội Thần kinh">Khoa Nội Thần kinh</option>
+            <option value="Khoa Hồi sức tích cực (ICU)">Khoa Hồi sức tích cực (ICU)</option>
+            <option value="Khoa Ngoại Thần kinh">Khoa Ngoại Thần kinh</option>
+            <option value="Khoa Tim mạch">Khoa Tim mạch</option>
+            <option value="Khoa Cấp cứu">Khoa Cấp cứu</option>
+          </select>
+        </div>
+
+        <button class="btn-new-eval" onclick="startNewAssessment()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Đánh giá mới
+        </button>
+
+        <!-- Logged in user info chip -->
+        <div class="user-profile-chip" id="userProfileChip">
+          <div class="user-avatar" id="headerUserAvatar">ĐD</div>
+          <div class="user-info-text">
+            <span class="user-name-tag" id="headerUserName">THUYPTT</span>
+            <span class="user-role-tag" id="headerUserRole">ĐD Khoa Nội Thần kinh</span>
+          </div>
+          <button class="btn-logout" title="Đăng xuất" onclick="handleLogout()">Thoát</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN VIEW CONTAINER ==================== -->
+  <main class="app-main">
+
+    <!-- ==================== VIEW 1: DASHBOARD ==================== -->
+    <section id="view-dashboard" class="view-section active">
+      <!-- KPI Top Summary -->
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-braden">
+          <div class="kpi-header">
+            <span class="kpi-title">Loét tì đè (Braden)</span>
+            <span class="risk-badge danger" id="kpi-braden-badge">Nguy cơ ≤12</span>
+          </div>
+          <div class="kpi-value" id="kpi-braden-val">0/20</div>
+          <div class="kpi-sub">
+            <span id="kpi-braden-pct">0% NB nguy cơ cao</span>
+            <span>Mục tiêu: ≤ 10%</span>
+          </div>
+          <div class="kpi-progress-bg">
+            <div id="kpi-braden-bar" class="kpi-progress-bar" style="width:0%; background:#2563eb;"></div>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-pain">
+          <div class="kpi-header">
+            <span class="kpi-title">Đau nặng (NRS / VAS)</span>
+            <span class="risk-badge danger" id="kpi-pain-badge">Điểm ≥ 7</span>
+          </div>
+          <div class="kpi-value" id="kpi-pain-val">0/20</div>
+          <div class="kpi-sub">
+            <span id="kpi-pain-pct">0% NB đau nặng</span>
+            <span>Mục tiêu: ≤ 15%</span>
+          </div>
+          <div class="kpi-progress-bg">
+            <div id="kpi-pain-bar" class="kpi-progress-bar" style="width:0%; background:#9333ea;"></div>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-vip">
+          <div class="kpi-header">
+            <span class="kpi-title">Viêm tĩnh mạch (VIP)</span>
+            <span class="risk-badge danger" id="kpi-vip-badge">VIP ≥ 2 (Rút Catheter)</span>
+          </div>
+          <div class="kpi-value" id="kpi-vip-val">0/20</div>
+          <div class="kpi-sub">
+            <span id="kpi-vip-pct">0% NB có viêm TM</span>
+            <span>Mục tiêu: ≤ 5%</span>
+          </div>
+          <div class="kpi-progress-bg">
+            <div id="kpi-vip-bar" class="kpi-progress-bar" style="width:0%; background:#0d9488;"></div>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-morse">
+          <div class="kpi-header">
+            <span class="kpi-title">Té ngã (Morse)</span>
+            <span class="risk-badge danger" id="kpi-morse-badge">Điểm ≥ 45</span>
+          </div>
+          <div class="kpi-value" id="kpi-morse-val">0/20</div>
+          <div class="kpi-sub">
+            <span id="kpi-morse-pct">0% NB nguy cơ cao</span>
+            <span>Mục tiêu: ≤ 20%</span>
+          </div>
+          <div class="kpi-progress-bg">
+            <div id="kpi-morse-bar" class="kpi-progress-bar" style="width:0%; background:#ea580c;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Row: Bed Map & Bed Detail -->
+      <div class="dashboard-main-row">
+        <!-- Bed Map -->
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-title">
+            <span>Sơ đồ 20 Giường Bệnh Toàn Khoa (Chạm để xem chi tiết)</span>
+            <span id="bed-last-updated" style="font-size:12px;font-weight:normal;color:var(--text-muted);">Cập nhật: Mới nhất</span>
+          </div>
+          <div id="bedGridContainer" class="bed-grid">
+            <!-- Rendered by JS -->
+          </div>
+          <div class="bed-map-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--success);"></div> An toàn / Ổn định</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--warning);"></div> Có 1 chỉ số nguy cơ</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--danger);"></div> ≥ 2 chỉ số nguy cơ / Nguy cơ rất cao</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#94a3b8;"></div> Giường trống</div>
+          </div>
+        </div>
+
+        <!-- Bed Quick Inspection Card -->
+        <div class="bed-detail-panel" id="bedDetailPanel">
+          <div class="bed-detail-header">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <h3 id="panel-bed-title" style="font-size:18px; font-weight:800; color:var(--text);">Giường 01</h3>
+                <div id="panel-patient-sub" style="font-size:13px; color:var(--text-muted); margin-top:2px;">BN: Nguyễn Văn A (68T - Nam)</div>
+              </div>
+              <span id="panel-overall-badge" class="risk-badge neutral">Đang tải</span>
+            </div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:6px;" id="panel-nurse-info">ĐD đánh giá: ĐD. Trần Thị Lan · 07:30 hôm nay</div>
+          </div>
+
+          <!-- 4 Indicators Bars -->
+          <div style="flex:1;">
+            <div class="bed-metric-row">
+              <span class="metric-name">Braden (Loét tì đè)</span>
+              <div class="metric-value-wrap">
+                <span id="panel-val-braden" style="font-weight:700;">14đ</span>
+                <span id="panel-badge-braden" class="risk-badge neutral">Trung bình</span>
+              </div>
+            </div>
+            <div class="bed-metric-row">
+              <span class="metric-name">Đau (NRS/VAS)</span>
+              <div class="metric-value-wrap">
+                <span id="panel-val-pain" style="font-weight:700;">3/10</span>
+                <span id="panel-badge-pain" class="risk-badge neutral">Đau nhẹ</span>
+              </div>
+            </div>
+            <div class="bed-metric-row">
+              <span class="metric-name">VIP (Viêm tĩnh mạch)</span>
+              <div class="metric-value-wrap">
+                <span id="panel-val-vip" style="font-weight:700;">VIP 0</span>
+                <span id="panel-badge-vip" class="risk-badge neutral">Bình thường</span>
+              </div>
+            </div>
+            <div class="bed-metric-row">
+              <span class="metric-name">Morse (Té ngã)</span>
+              <div class="metric-value-wrap">
+                <span id="panel-val-morse" style="font-weight:700;">20đ</span>
+                <span id="panel-badge-morse" class="risk-badge neutral">Thấp</span>
+              </div>
+            </div>
+
+            <!-- Suggested Actions -->
+            <div style="margin-top:16px; background:#f8fafc; border-radius:8px; padding:12px; border:1px solid var(--border);">
+              <div style="font-size:12px; font-weight:700; color:var(--primary); margin-bottom:4px;">Gợi ý can thiệp điều dưỡng:</div>
+              <div id="panel-action-suggest" style="font-size:12px; color:var(--text); line-height:1.4;">
+                Theo dõi thường quy theo y lệnh.
+              </div>
+            </div>
+          </div>
+
+          <!-- Action buttons for selected bed -->
+          <div style="margin-top:16px; display:flex; gap:8px;">
+            <button id="panel-btn-eval" class="btn-new-eval" style="flex:1; justify-content:center;" onclick="editCurrentSelectedBed()">
+              Đánh giá lại giường này
+            </button>
+            <button class="btn-reset-form" onclick="printPatientReport(currentSelectedBedId)">In phiếu</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority Action Table & Trend Chart -->
+      <div style="display:grid; grid-template-columns: 1.3fr 1fr; gap:20px;">
+        <!-- Priority Table -->
+        <div class="card">
+          <div class="card-title">
+            <span>Danh sách Giường cần ưu tiên Can thiệp ngay</span>
+            <span class="risk-badge danger" id="priorityCountBadge">0 Giường</span>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Giường</th>
+                  <th>Người bệnh</th>
+                  <th>Chỉ số nguy cơ</th>
+                  <th>Gợi ý can thiệp Điều dưỡng</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="priorityTableBody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Trend Chart Card -->
+        <div class="card">
+          <div class="card-title">
+            <span>Xu hướng Tỷ lệ Nguy cơ cao (%) qua các tuần</span>
+          </div>
+          <div class="chart-container" id="trendChartContainer">
+            <!-- Inline SVG Chart -->
+          </div>
+          <div style="display:flex; justify-content:center; gap:12px; font-size:11px; margin-top:8px; color:var(--text-muted);">
+            <span style="color:#2563eb;">● Braden</span>
+            <span style="color:#9333ea;">● Đau (NRS)</span>
+            <span style="color:#0d9488;">● VIP</span>
+            <span style="color:#ea580c;">● Morse</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== VIEW 2: PHIẾU ĐÁNH GIÁ (ASSESSMENT FORM) ==================== -->
+    <section id="view-assessment" class="view-section">
+      <div class="card">
+        <div class="card-title">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="background:var(--primary); color:white; width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700;">📝</div>
+            <div>
+              <div style="font-size:16px; font-weight:700;" id="formViewHeading">Phiếu Đánh Giá Mới — 4 Thang Điểm Điều Dưỡng</div>
+              <div style="font-size:12px; font-weight:normal; color:var(--text-muted);" id="formViewSubHeading">Phiếu mới để trắng hoàn toàn các ô chọn để điều dưỡng đánh giá thực tế</div>
+            </div>
+          </div>
+          <button class="btn-reset-form" onclick="resetAssessmentForm()">Làm mới phiếu</button>
+        </div>
+
+        <!-- Administrative Info Grid -->
+        <div class="form-section-title">1. Thông tin Hành chính & Giường bệnh</div>
+        <div class="form-grid-3">
+          <div class="input-group">
+            <label>Khoa / Phòng điều trị *</label>
+            <input type="text" id="form-dept" value="Khoa Nội Thần kinh" required>
+          </div>
+          <div class="input-group">
+            <label>Số giường bệnh *</label>
+            <select id="form-bed" onchange="onFormBedSelected()">
+              <!-- Options 1..20 -->
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Họ và tên Người bệnh *</label>
+            <input type="text" id="form-patient-name" placeholder="Nguyễn Văn A" required>
+          </div>
+          <div class="input-group">
+            <label>Năm sinh / Tuổi</label>
+            <input type="text" id="form-patient-age" placeholder="65 tuổi">
+          </div>
+          <div class="input-group">
+            <label>Giới tính</label>
+            <select id="form-patient-gender">
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Mã hồ sơ / Mã bệnh án</label>
+            <input type="text" id="form-patient-code" placeholder="BA-2026-001">
+          </div>
+          <div class="input-group">
+            <label>Điều dưỡng thực hiện đánh giá *</label>
+            <input type="text" id="form-nurse-name" placeholder="ĐD. Trần Thị Lan" required>
+          </div>
+          <div class="input-group">
+            <label>Thời điểm đánh giá</label>
+            <input type="datetime-local" id="form-eval-time">
+          </div>
+        </div>
+
+        <!-- Scale Evaluation Tabs -->
+        <div class="form-section-title" style="margin-top:24px;">2. Nội dung Đánh giá 4 Thang điểm Lâm sàng</div>
+        
+        <div class="scales-tabs">
+          <button type="button" class="scale-tab-btn active" data-scale="braden" onclick="switchScaleTab('braden')">
+            <span>Loét tì đè (Braden)</span>
+            <span class="tab-score-badge" id="tab-score-braden">—</span>
+          </button>
+          <button type="button" class="scale-tab-btn" data-scale="pain" onclick="switchScaleTab('pain')">
+            <span>Đau (NRS / VAS)</span>
+            <span class="tab-score-badge" id="tab-score-pain">—</span>
+          </button>
+          <button type="button" class="scale-tab-btn" data-scale="vip" onclick="switchScaleTab('vip')">
+            <span>Viêm tĩnh mạch (VIP)</span>
+            <span class="tab-score-badge" id="tab-score-vip">—</span>
+          </button>
+          <button type="button" class="scale-tab-btn" data-scale="morse" onclick="switchScaleTab('morse')">
+            <span>Té ngã (Morse)</span>
+            <span class="tab-score-badge" id="tab-score-morse">—</span>
+          </button>
+        </div>
+
+        <!-- Tab 1: Braden Scale Panel -->
+        <div id="panel-scale-braden" class="scale-panel active">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div style="font-size:13px; color:var(--text-muted);">Thang 6–23 điểm. Điểm càng thấp nguy cơ càng cao: ≤9 Rất cao · 10–12 Cao · 13–14 Trung bình · 15–18 Nhẹ · 19–23 Không nguy cơ.</div>
+            <div id="braden-risk-badge-live" class="risk-badge">Chưa đánh giá (0/6 tiêu chí)</div>
+          </div>
+          <div id="bradenQuestionsContainer">
+            <!-- Questions rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Tab 2: Pain (NRS/VAS) Panel -->
+        <div id="panel-scale-pain" class="scale-panel">
+          <div class="pain-slider-wrap">
+            <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px;">Thang điểm đánh giá đau (Numeric Rating Scale - NRS / VAS)</div>
+            <div style="font-size:12px; color:var(--text-muted);">Người bệnh tự cho điểm mức độ đau từ 0 (Không đau) đến 10 (Đau dữ dội nhất tưởng tượng được).</div>
+            
+            <div style="margin:16px 0;">
+              <div class="pain-score-display" id="painScoreDisplay" style="color:var(--text-muted);">—</div>
+              <div id="painRiskBadgeLive" class="risk-badge">Chưa đánh giá</div>
+            </div>
+
+            <div style="margin-bottom:8px; font-size:13px; font-weight:600; color:var(--text);">Bấm chọn trực tiếp mức điểm đau (0 – 10):</div>
+            <div class="pain-btn-selector" id="painQuickButtons" style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:12px 0;">
+              <!-- 0..10 buttons generated by JS -->
+            </div>
+
+            <div style="max-width:520px; margin:16px auto 8px auto;">
+              <input type="range" min="0" max="10" step="1" value="0" id="painSlider" class="pain-range-slider" oninput="onPainSliderChange(this.value)">
+              <div class="pain-ticks">
+                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+              </div>
+            </div>
+
+            <div class="pain-levels-grid">
+              <div class="pain-level-box" style="background:#ecfdf5; color:#065f46; cursor:pointer;" onclick="onPainSliderChange(0)">0: Không đau</div>
+              <div class="pain-level-box" style="background:#f7fee7; color:#3f6212; cursor:pointer;" onclick="onPainSliderChange(2)">1 – 3: Đau nhẹ</div>
+              <div class="pain-level-box" style="background:#fffbeb; color:#b45309; cursor:pointer;" onclick="onPainSliderChange(5)">4 – 6: Đau vừa</div>
+              <div class="pain-level-box" style="background:#fef2f2; color:#b91c1c; cursor:pointer;" onclick="onPainSliderChange(8)">7 – 10: Đau nặng 🚨</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: VIP Score Panel -->
+        <div id="panel-scale-vip" class="scale-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div style="font-size:13px; color:var(--text-muted);">Quan sát vị trí luồn catheter ngoại vi và sờ nắn. Chọn 1 mức điểm phù hợp nhất. VIP ≥ 2 cần rút/đổi catheter!</div>
+            <div id="vip-risk-badge-live" class="risk-badge">Chưa đánh giá</div>
+          </div>
+          <div id="vipOptionsContainer" class="options-grid">
+            <!-- VIP options rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Tab 4: Morse Fall Scale Panel -->
+        <div id="panel-scale-morse" class="scale-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div style="font-size:13px; color:var(--text-muted);">Thang 0–125 điểm. Điểm càng cao nguy cơ càng cao: 0–24 Nguy cơ thấp · 25–44 Trung bình · ≥45 Nguy cơ cao.</div>
+            <div id="morse-risk-badge-live" class="risk-badge">Chưa đánh giá (0/6 tiêu chí)</div>
+          </div>
+          <div id="morseQuestionsContainer">
+            <!-- Morse questions rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Sticky Footer for Quick Save -->
+        <div class="form-action-bar">
+          <div class="overall-assessment-preview">
+            <span style="font-size:13px; font-weight:700; color:var(--text-muted);">TỔNG QUAN PHÂN TẦNG:</span>
+            <span id="form-overall-badge-live" class="risk-badge">Chưa hoàn tất (0/4 thang điểm)</span>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button type="button" class="btn-reset-form" onclick="switchView('dashboard')">Quay lại Dashboard</button>
+            <button type="button" class="btn-save-eval" onclick="saveAssessmentForm()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Lưu Đánh Giá Bệnh Nhân
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================== VIEW 3: DANH SÁCH & LỊCH SỬ BỆNH NHÂN ==================== -->
+    <section id="view-patients" class="view-section">
+      <div class="card">
+        <div class="card-title">
+          <span>Danh Sách Người Bệnh & Kết Quả Đánh Giá Hiện Tại</span>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="patientSearchInput" placeholder="Tìm tên BN hoặc số giường..." style="padding:6px 12px; border:1px solid var(--border); border-radius:8px; font-size:13px;" oninput="renderPatientsTable()">
+            <select id="patientFilterRisk" style="padding:6px 12px; border:1px solid var(--border); border-radius:8px; font-size:13px;" onchange="renderPatientsTable()">
+              <option value="all">Tất cả mức độ</option>
+              <option value="danger">Chỉ nguy cơ cao 🔴</option>
+              <option value="warning">Chỉ nguy cơ trung bình 🟡</option>
+              <option value="safe">An toàn 🟢</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Giường</th>
+                <th>Người bệnh</th>
+                <th>Tuổi / Giới</th>
+                <th>Braden</th>
+                <th>NRS</th>
+                <th>VIP</th>
+                <th>Morse</th>
+                <th>Cảnh báo</th>
+                <th>ĐD Đánh giá</th>
+                <th>Cập nhật lúc</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="patientsFullTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- History Audit Log -->
+      <div class="card">
+        <div class="card-title">
+          <span>Nhật ký Lịch sử Đánh giá (Audit Trail)</span>
+          <span style="font-size:12px; font-weight:normal; color:var(--text-muted);" id="historyLogCount">0 lượt ghi nhận</span>
+        </div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Thời gian</th>
+                <th>Giường</th>
+                <th>Người bệnh</th>
+                <th>Braden</th>
+                <th>NRS</th>
+                <th>VIP</th>
+                <th>Morse</th>
+                <th>Tổng phân tầng</th>
+                <th>Điều dưỡng</th>
+              </tr>
+            </thead>
+            <tbody id="auditHistoryTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== VIEW 4: XUẤT BÁO CÁO & TIỆN ÍCH ==================== -->
+    <section id="view-reports" class="view-section">
+      <div class="card">
+        <div class="card-title">
+          <span>Xuất Báo Cáo & In Phiếu Lâm Sàng</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+          
+          <!-- Box 1: Excel / CSV Export -->
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:20px;">
+            <div style="font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+              📊 Xuất Báo Cáo Excel (.CSV)
+            </div>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+              Tải về toàn bộ bảng dữ liệu người bệnh, điểm số 4 thang đo và phân tầng nguy cơ hiện tại để báo cáo giao ban ca hoặc gửi Phòng Điều dưỡng.
+            </p>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <button class="btn-new-eval" style="justify-content:center; background:#16a34a;" onclick="exportToExcel()">
+                Tải Báo Cáo Toàn Khoa (.CSV UTF-8)
+              </button>
+              <button class="btn-reset-form" onclick="exportPriorityOnlyToExcel()">
+                Chỉ tải danh sách người bệnh nguy cơ cao (.CSV)
+              </button>
+            </div>
+          </div>
+
+          <!-- Box 2: Print Sheet -->
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:20px;">
+            <div style="font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+              🖨️ In Phiếu Đánh Giá Khổ A4 (PDF)
+            </div>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+              Tạo định dạng phiếu in chuẩn hồ sơ bệnh án cho từng bệnh nhân để lưu trữ hoặc trình ký bác sĩ điều trị.
+            </p>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <select id="printSelectBed" style="padding:9px 12px; border:1px solid var(--border); border-radius:8px; font-size:13px; flex:1;">
+                <!-- 1..20 -->
+              </select>
+              <button class="btn-new-eval" onclick="printPatientReport(document.getElementById('printSelectBed').value)">
+                Xem & In Phiếu A4
+              </button>
+            </div>
+          </div>
+
+          <!-- Box 3: Backup & Restore -->
+          <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:20px;">
+            <div style="font-size:16px; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+              💾 Sao Lưu & Khôi Phục Dữ Liệu
+            </div>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+              Dữ liệu được lưu trong trình duyệt máy này. Bạn có thể sao lưu ra tệp JSON để chuyển sang máy tính khác hoặc khôi phục dữ liệu mẫu.
+            </p>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-reset-form" style="flex:1;" onclick="backupDataJSON()">Sao lưu (JSON)</button>
+              <button class="btn-reset-form" style="flex:1;" onclick="triggerRestoreJSON()">Khôi phục</button>
+              <input type="file" id="restoreFileInput" style="display:none;" accept=".json" onchange="handleFileRestore(event)">
+            </div>
+            <div style="margin-top:10px; text-align:center;">
+              <a href="#" style="font-size:12px; color:#ef4444; text-decoration:none;" onclick="resetToFactoryDefault(); return false;">⚠️ Tải lại dữ liệu minh họa ban đầu (20 giường)</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== VIEW 5: QUẢN LÝ TÀI KHOẢN & PHÂN QUYỀN PILOT ==================== -->
+    <section id="view-accounts" class="view-section">
+      <div class="card">
+        <div class="card-title">
+          <span>Danh Sách Tài Khoản Thí Điểm (Pilot) – Khoa Nội Thần Kinh</span>
+          <span class="risk-badge info">Dữ liệu theo file Phan_quyen_tai_khoan_pilot_Noi_Than_Kinh.xlsx</span>
+        </div>
+        <div class="data-table-wrap" style="margin-bottom:20px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Username</th>
+                <th>Chức danh / Vai trò</th>
+                <th>Đơn vị</th>
+                <th>Phạm vi dữ liệu</th>
+                <th>Nhóm quyền</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="pilotAccountsTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Permission Matrix Table -->
+      <div class="card">
+        <div class="card-title">
+          <span>Ma Trận Quyền Đề Xuất Theo Nhóm Vai Trò</span>
+        </div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nhóm quyền</th>
+                <th>Xem hồ sơ</th>
+                <th>Tự đánh giá</th>
+                <th>Đánh giá nhân viên</th>
+                <th>Duyệt cấp khoa</th>
+                <th>Duyệt Ban ĐD</th>
+                <th>Quản lý tài khoản</th>
+                <th>Cấu hình hệ thống</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b style="color:#0f766e;">ADMIN</b> (HOADT)</td>
+                <td>Toàn bộ</td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td>Toàn bộ</td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td><span class="risk-badge success">Có</span></td>
+              </tr>
+              <tr>
+                <td><b>DDT_BV</b> (YENCTH)</td>
+                <td>Toàn BV</td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td>Theo phân công</td>
+                <td>Theo quy trình</td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td>Không</td>
+                <td>Không</td>
+              </tr>
+              <tr>
+                <td><b>PHO_PHONG_DD</b> (MINHNT)</td>
+                <td>Toàn BV</td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td>Theo phân công</td>
+                <td>Theo quy trình</td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td>Không</td>
+                <td>Không</td>
+              </tr>
+              <tr>
+                <td><b style="color:#2563eb;">DDT_KHOA</b> (QUYLTT)</td>
+                <td>Trong khoa</td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td>Trong khoa</td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td>Không</td>
+                <td>Không</td>
+                <td>Không</td>
+              </tr>
+              <tr>
+                <td><b>DIEU_DUONG</b> (THUYPTT, KIENNG, LENT)</td>
+                <td>Cá nhân/Khoa</td>
+                <td><span class="risk-badge success">Có</span></td>
+                <td>Không</td>
+                <td>Không</td>
+                <td>Không</td>
+                <td>Không</td>
+                <td>Không</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PRINT MODAL -->
+  <div class="modal-overlay" id="printModal">
+    <div class="modal-dialog">
+      <button class="modal-close-btn no-print" onclick="closePrintModal()">✕</button>
+      <div id="printModalContent">
+        <!-- Rendered print template -->
+      </div>
+      <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;" class="no-print">
+        <button class="btn-reset-form" onclick="closePrintModal()">Đóng</button>
+        <button class="btn-new-eval" onclick="window.print()">
+          🖨️ In ra Máy in / Lưu PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHANGE PASSWORD MODAL -->
+  <div class="modal-overlay" id="changePassModal">
+    <div class="modal-dialog" style="max-width:440px;">
+      <button class="modal-close-btn" onclick="closeChangePassModal()">✕</button>
+      <h3 style="font-size:18px; font-weight:800; margin-bottom:8px;">Đổi Mật Khẩu Tài Khoản</h3>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">
+        Đổi mật khẩu cho tài khoản <b id="changePassUserTag">THUYPTT</b>
+      </p>
+      <form onsubmit="handleChangePassSubmit(event)">
+        <div class="input-group" style="margin-bottom:12px;">
+          <label>Mật khẩu hiện tại *</label>
+          <input type="password" id="oldPasswordInput" required>
+        </div>
+        <div class="input-group" style="margin-bottom:12px;">
+          <label>Mật khẩu mới *</label>
+          <input type="password" id="newPasswordInput" required minlength="4">
+        </div>
+        <div class="input-group" style="margin-bottom:16px;">
+          <label>Xác nhận mật khẩu mới *</label>
+          <input type="password" id="confirmPasswordInput" required minlength="4">
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="btn-reset-form" onclick="closeChangePassModal()">Hủy</button>
+          <button type="submit" class="btn-new-eval">Cập nhật mật khẩu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="toast">
+    <span id="toastMessage">Thông báo</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT APPLICATION CORE ==================== -->
+  <script>
+    /* ================= 1. DANH SÁCH TÀI KHOẢN PILOT (TỪ FILE EXCEL) ================= */
+    const PILOT_ACCOUNTS = [
+      {
+        stt: 1,
+        username: "YENCTH",
+        name: "Cao Thị Hải Yến",
+        password: "1",
+        title: "Điều dưỡng trưởng bệnh viện",
+        unit: "Ban Điều dưỡng",
+        scope: "Toàn bệnh viện",
+        roleGroup: "DDT_BV",
+        status: "Hoạt động (Pilot)"
+      },
+      {
+        stt: 2,
+        username: "HOADT",
+        name: "Đỗ Thị Hoa",
+        password: "1",
+        title: "Quản trị hệ thống (toàn quyền)",
+        unit: "Quản trị",
+        scope: "Toàn hệ thống",
+        roleGroup: "ADMIN",
+        status: "Hoạt động (Pilot)"
+      },
+      {
+        stt: 3,
+        username: "QUYLTT",
+        name: "Lê Thị Trúc Quy",
+        password: "1",
+        title: "Điều dưỡng trưởng khoa Nội Thần kinh",
+        unit: "Khoa Nội Thần kinh",
+        scope: "Khoa Nội Thần kinh",
+        roleGroup: "DDT_KHOA",
+        status: "Hoạt động (Pilot)"
+      },
+      {
+        stt: 4,
+        username: "MINHNT",
+        name: "Nguyễn Thị Minh",
+        password: "1",
+        title: "Phó phòng Điều dưỡng",
+        unit: "Ban Điều dưỡng",
+        scope: "Toàn bệnh viện",
+        roleGroup: "PHO_PHONG_DD",
+        status: "Hoạt động (Pilot)"
+      },
+      {
+        stt: 5,
+        username: "THUYPTT",
+        name: "Phạm Thị Thu Thủy",
+        password: "1",
+        title: "Điều dưỡng khoa Nội Thần kinh",
+        unit: "Khoa Nội Thần kinh",
+        scope: "Cá nhân / khoa theo nhiệm vụ",
+        roleGroup: "DIEU_DUONG",
+        status: "Hoạt động (Pilot)"
+      },
+      {
+        stt: 6,
+        username: "KIENNG",
+        name: "Nguyễn Gia Kiên",
+        password: "1",
+        title: "Điều dưỡng khoa Nội Thần kinh",
+        unit: "Khoa Nội Thần kinh",
+        scope: "Cá nhân / khoa theo nhiệm vụ",
+        roleGroup: "DIEU_DUONG",
+        status: "Hoạt động (Pilot)"
+      },
+      {
+        stt: 7,
+        username: "LENT",
+        name: "Nguyễn Thị Lệ",
+        password: "1",
+        title: "Điều dưỡng khoa Nội Thần kinh",
+        unit: "Khoa Nội Thần kinh",
+        scope: "Cá nhân / khoa theo nhiệm vụ",
+        roleGroup: "DIEU_DUONG",
+        status: "Hoạt động (Pilot)"
+      }
+    ];
+
+    /* ================= 2. QUẢN LÝ XÁC THỰC & ĐĂNG NHẬP (AUTH) ================= */
+    const AUTH_STORAGE_KEY = "BV_DONGNAI_AUTH_USER_V1";
+    const ACCOUNTS_STORAGE_KEY = "BV_DONGNAI_PILOT_ACCOUNTS_V1";
+    let currentUser = null;
+    let localAccounts = [];
+
+    function initAccounts() {
+      try {
+        const raw = localStorage.getItem(ACCOUNTS_STORAGE_KEY);
+        if (raw) {
+          localAccounts = JSON.parse(raw);
+        } else {
+          localAccounts = [...PILOT_ACCOUNTS];
+          localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(localAccounts));
+        }
+      } catch (e) {
+        localAccounts = [...PILOT_ACCOUNTS];
+      }
+    }
+
+    function checkExistingLogin() {
+      initAccounts();
+      renderQuickLoginAccounts();
+      renderPilotAccountsTable();
+
+      try {
+        const saved = localStorage.getItem(AUTH_STORAGE_KEY);
+        if (saved) {
+          currentUser = JSON.parse(saved);
+          onUserLoggedIn(currentUser);
+          return;
+        }
+      } catch (e) {}
+
+      // Chưa đăng nhập -> Hiện form login
+      document.getElementById("loginOverlay").style.display = "flex";
+    }
+
+    function renderQuickLoginAccounts() {
+      const container = document.getElementById("quickLoginAccountList");
+      container.innerHTML = "";
+
+      localAccounts.forEach(acc => {
+        const div = document.createElement("div");
+        div.className = "quick-account-item";
+        div.innerHTML = `
+          <div>
+            <b style="color:var(--text);">${acc.username}</b> <span style="color:var(--text-muted);font-size:11px;">(${acc.name})</span>
+            <div style="font-size:10px; color:var(--primary);">${acc.title}</div>
+          </div>
+          <span class="risk-badge ${acc.roleGroup === 'ADMIN' ? 'purple' : acc.roleGroup.includes('DDT') ? 'info' : 'neutral'}" style="font-size:10px;">${acc.roleGroup}</span>
+        `;
+        div.onclick = () => {
+          document.getElementById("loginUsername").value = acc.username;
+          document.getElementById("loginPassword").value = acc.password || "1";
+          handleLoginSubmit(new Event('submit'));
+        };
+        container.appendChild(div);
+      });
+    }
+
+    function handleLoginSubmit(e) {
+      if (e) e.preventDefault();
+      const u = document.getElementById("loginUsername").value.trim().toUpperCase();
+      const p = document.getElementById("loginPassword").value.trim();
+      const errMsg = document.getElementById("loginErrorMessage");
+
+      const acc = localAccounts.find(a => a.username.toUpperCase() === u);
+      if (!acc) {
+        errMsg.innerText = "Tên đăng nhập không tồn tại trên hệ thống.";
+        errMsg.style.display = "block";
+        return;
+      }
+
+      // Hỗ trợ cả pass trong file và pass mặc định 1 / 123456
+      if (p !== acc.password && p !== "1" && p !== "123456") {
+        errMsg.innerText = "Mật khẩu không đúng. Vui lòng nhập lại (mặc định: 1).";
+        errMsg.style.display = "block";
+        return;
+      }
+
+      errMsg.style.display = "none";
+      currentUser = acc;
+
+      if (document.getElementById("rememberMeCheck").checked) {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentUser));
+      }
+
+      onUserLoggedIn(currentUser);
+      showToast(`Đăng nhập thành công! Xin chào ${acc.title} ${acc.name}`);
+    }
+
+    function onUserLoggedIn(user) {
+      document.getElementById("loginOverlay").style.display = "none";
+
+      // Cập nhật Header
+      document.getElementById("headerUserAvatar").innerText = user.username.slice(0, 2);
+      document.getElementById("headerUserName").innerText = `${user.username} (${user.name})`;
+      document.getElementById("headerUserRole").innerText = `${user.title} · ${user.roleGroup}`;
+
+      // Điền tên vào form đánh giá nếu trống hoặc trùng
+      const formNurseInput = document.getElementById("form-nurse-name");
+      if (formNurseInput) {
+        formNurseInput.value = `${user.name} (${user.username})`;
+      }
+
+      // Nếu user có đơn vị khoa cụ thể thì chọn khoa đó
+      if (user.unit && user.unit.includes("Khoa")) {
+        const deptSelect = document.getElementById("currentDeptSelect");
+        if (deptSelect && [...deptSelect.options].some(o => o.value === user.unit)) {
+          deptSelect.value = user.unit;
+          appState.currentDept = user.unit;
+        }
+      }
+    }
+
+    function handleLogout() {
+      if (confirm("Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?")) {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+        currentUser = null;
+        document.getElementById("loginUsername").value = "";
+        document.getElementById("loginPassword").value = "";
+        document.getElementById("loginOverlay").style.display = "flex";
+        showToast("Đã đăng xuất");
+      }
+    }
+
+    function openChangePassModal(username) {
+      const targetUser = username || currentUser?.username || "THUYPTT";
+      document.getElementById("changePassUserTag").innerText = targetUser;
+      document.getElementById("oldPasswordInput").value = "";
+      document.getElementById("newPasswordInput").value = "";
+      document.getElementById("confirmPasswordInput").value = "";
+      document.getElementById("changePassModal").classList.add("active");
+    }
+
+    function closeChangePassModal() {
+      document.getElementById("changePassModal").classList.remove("active");
+    }
+
+    function handleChangePassSubmit(e) {
+      e.preventDefault();
+      const targetUser = document.getElementById("changePassUserTag").innerText;
+      const oldP = document.getElementById("oldPasswordInput").value;
+      const newP = document.getElementById("newPasswordInput").value;
+      const confP = document.getElementById("confirmPasswordInput").value;
+
+      const acc = localAccounts.find(a => a.username === targetUser);
+      if (!acc) return;
+
+      if (oldP !== acc.password && oldP !== "1" && oldP !== "123456") {
+        alert("Mật khẩu hiện tại không đúng!");
+        return;
+      }
+      if (newP !== confP) {
+        alert("Mật khẩu mới và xác nhận mật khẩu không khớp!");
+        return;
+      }
+
+      acc.password = newP;
+      acc.status = "Đã đổi mật khẩu";
+      localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(localAccounts));
+
+      if (currentUser && currentUser.username === targetUser) {
+        currentUser.password = newP;
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentUser));
+      }
+
+      closeChangePassModal();
+      renderQuickLoginAccounts();
+      renderPilotAccountsTable();
+      showToast(`Đã đổi mật khẩu cho tài khoản ${targetUser} thành công!`);
+    }
+
+    function renderPilotAccountsTable() {
+      const tbody = document.getElementById("pilotAccountsTableBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      localAccounts.forEach(acc => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${acc.stt}</td>
+          <td><b>${acc.username}</b></td>
+          <td><b>${acc.name}</b><br><small style="color:var(--text-muted);">${acc.title}</small></td>
+          <td>${acc.unit}</td>
+          <td>${acc.scope}</td>
+          <td><span class="risk-badge ${acc.roleGroup === 'ADMIN' ? 'purple' : acc.roleGroup.includes('DDT') ? 'info' : 'neutral'}">${acc.roleGroup}</span></td>
+          <td><span class="risk-badge success">${acc.status}</span></td>
+          <td>
+            <button class="nav-tab" style="padding:4px 8px;font-size:11px;" onclick="openChangePassModal('${acc.username}')">Đổi MK</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* ================= 3. DỮ LIỆU CÁC THANG ĐO CHUẨN ================= */
+    const BRADEN_ITEMS = [
+      {
+        key: "sensory",
+        label: "1. Cảm nhận cảm giác",
+        sub: "Khả năng phản ứng với cảm giác khó chịu do tì đè",
+        options: [
+          { v: 1, t: "Mất hoàn toàn — không đáp ứng với kích thích đau hoặc liệt diện rộng" },
+          { v: 2, t: "Hạn chế nhiều — chỉ đáp ứng kích thích đau, khó diễn đạt khó chịu" },
+          { v: 3, t: "Hạn chế ít — đáp ứng khi gọi, đôi lúc không báo nhu cầu đổi tư thế" },
+          { v: 4, t: "Bình thường — cảm nhận và thông báo rõ ràng khó chịu/đau" }
+        ]
+      },
+      {
+        key: "moisture",
+        label: "2. Độ ẩm da",
+        sub: "Mức độ da tiếp xúc với độ ẩm (mồ hôi, nước tiểu...)",
+        options: [
+          { v: 1, t: "Ướt liên tục — da luôn ẩm ướt, thấy ẩm mỗi lần xoay trở" },
+          { v: 2, t: "Thường xuyên ẩm — cần thay ga/đồ vải ít nhất mỗi ca trực" },
+          { v: 3, t: "Thỉnh thoảng ẩm — cần thay đồ vải thêm ~1 lần/ngày" },
+          { v: 4, t: "Hiếm khi ẩm — da thường khô ráo, thay đồ theo lịch thường quy" }
+        ]
+      },
+      {
+        key: "activity",
+        label: "3. Mức độ hoạt động",
+        sub: "Mức độ vận động thể lực rời giường",
+        options: [
+          { v: 1, t: "Nằm liệt giường — không thể rời giường" },
+          { v: 2, t: "Chỉ ngồi ghế — không thể đi lại, cần giúp chuyển sang ghế" },
+          { v: 3, t: "Đi lại đôi lúc — đi quãng ngắn có trợ giúp, phần lớn nằm/ngồi" },
+          { v: 4, t: "Đi lại thường xuyên — đi lại nhiều lần trong và ngoài phòng" }
+        ]
+      },
+      {
+        key: "mobility",
+        label: "4. Khả năng vận động",
+        sub: "Khả năng tự thay đổi và duy trì tư thế cơ thể",
+        options: [
+          { v: 1, t: "Bất động hoàn toàn — không tự thay đổi tư thế nếu không có người giúp" },
+          { v: 2, t: "Rất hạn chế — chỉ cử động nhẹ, không tự xoay trở đáng kể" },
+          { v: 3, t: "Hạn chế ít — tự thay đổi nhẹ tư thế thường xuyên" },
+          { v: 4, t: "Không hạn chế — tự thay đổi tư thế lớn và thường xuyên không cần trợ giúp" }
+        ]
+      },
+      {
+        key: "nutrition",
+        label: "5. Dinh dưỡng",
+        sub: "Khẩu phần ăn và lượng dinh dưỡng hấp thu",
+        options: [
+          { v: 1, t: "Rất kém — ăn ≤ 1/3 suất, hoặc nhịn ăn/chỉ uống nước trong thời gian dài" },
+          { v: 2, t: "Có thể không đủ — ăn khoảng 1/2 suất, chưa đáp ứng đủ nhu cầu" },
+          { v: 3, t: "Đầy đủ — ăn > 1/2 suất, hoặc nuôi dưỡng qua sonde/tĩnh mạch đạt yêu cầu" },
+          { v: 4, t: "Rất tốt — ăn hết khẩu phần, đầy đủ chất đạm và năng lượng" }
+        ]
+      },
+      {
+        key: "friction",
+        label: "6. Ma sát & lực trượt",
+        sub: "Cọ xát da khi di chuyển hoặc đổi tư thế",
+        options: [
+          { v: 1, t: "Có vấn đề — cần hỗ trợ tối đa khi di chuyển, thường xuyên bị trượt" },
+          { v: 2, t: "Vấn đề tiềm ẩn — di chuyển yếu, cần hỗ trợ ít, đôi lúc trượt" },
+          { v: 3, t: "Không có vấn đề — tự nâng và dịch chuyển cơ thể vững vàng, ít cọ xát" }
+        ]
+      }
+    ];
+
+    const VIP_OPTIONS = [
+      { v: 0, t: "Vị trí đặt catheter bình thường; không đau, không đỏ, không sưng cứng.", action: "Theo dõi thường quy", level: 0 },
+      { v: 1, t: "Có MỘT trong hai dấu hiệu: đau nhẹ gần vị trí HOẶC đỏ nhẹ tại vị trí kim.", action: "Theo dõi sát vị trí, đánh giá lại", level: 1 },
+      { v: 2, t: "Có HAI trong ba dấu hiệu: đau, đỏ, sưng nề — Giai đoạn viêm tĩnh mạch SỚM.", action: "Ngừng truyền, RÚT/ĐỔI catheter mới", level: 2 },
+      { v: 3, t: "Có ĐỦ: đau dọc đường catheter, sưng đỏ, mô cứng — Viêm tĩnh mạch TRUNG BÌNH.", action: "Rút catheter, theo dõi tổn thương, báo bác sĩ", level: 3 },
+      { v: 4, t: "Có ĐỦ dấu hiệu trên + sờ thấy thừng tĩnh mạch cứng — Bắt đầu VIÊM TẮC tĩnh mạch.", action: "Rút catheter, báo bác sĩ ngay, xử trí theo quy trình", level: 4 },
+      { v: 5, t: "Có ĐỦ dấu hiệu mức 4 + kèm SỐT (pyrexia) — Viêm tắc tĩnh mạch NẶNG.", action: "Rút catheter, báo bác sĩ khẩn cấp, điều trị nhiễm trùng", level: 4 }
+    ];
+
+    const MORSE_ITEMS = [
+      {
+        key: "history",
+        label: "1. Tiền sử té ngã (trong 3 tháng gần đây)",
+        options: [
+          { v: 0, t: "Không có" },
+          { v: 25, t: "Có té ngã trong vòng 3 tháng" }
+        ]
+      },
+      {
+        key: "secondary",
+        label: "2. Chẩn đoán phụ (> 1 chẩn đoán y khoa)",
+        options: [
+          { v: 0, t: "Không có" },
+          { v: 15, t: "Có nhiều hơn 1 chẩn đoán" }
+        ]
+      },
+      {
+        key: "aid",
+        label: "3. Dụng cụ hỗ trợ đi lại",
+        options: [
+          { v: 0, t: "Không có / nằm liệt giường / có nhân viên y tế hỗ trợ" },
+          { v: 15, t: "Sử dụng nạng, gậy, hoặc khung tập đi" },
+          { v: 30, t: "Phải bám víu vào đồ đạc, tường xung quanh để đi" }
+        ]
+      },
+      {
+        key: "iv",
+        label: "4. Đường truyền tĩnh mạch / Khóa Heparin",
+        options: [
+          { v: 0, t: "Không có đường truyền" },
+          { v: 20, t: "Đang có đường truyền tĩnh mạch hoặc khóa heparin" }
+        ]
+      },
+      {
+        key: "gait",
+        label: "5. Dáng đi của người bệnh",
+        options: [
+          { v: 0, t: "Bình thường / nằm tại giường / bất động hoàn toàn" },
+          { v: 10, t: "Dáng đi yếu, bước ngắn" },
+          { v: 20, t: "Suy giảm rõ rệt (loạng choạng, mất thăng bằng, cần vịn)" }
+        ]
+      },
+      {
+        key: "mental",
+        label: "6. Trạng thái nhận thức",
+        options: [
+          { v: 0, t: "Tự nhận thức đúng khả năng vận động của bản thân" },
+          { v: 15, t: "Đánh giá quá cao khả năng / quên hoặc phớt lờ giới hạn" }
+        ]
+      }
+    ];
+
+    /* ================= 4. HÀM PHÂN LOẠI NGUY CƠ ================= */
+    function calcBradenRisk(score) {
+      if (score <= 9) return { label: "Nguy cơ rất cao", level: "danger", num: 4 };
+      if (score <= 12) return { label: "Nguy cơ cao", level: "danger", num: 3 };
+      if (score <= 14) return { label: "Nguy cơ trung bình", level: "warning", num: 2 };
+      if (score <= 18) return { label: "Nguy cơ nhẹ", level: "success", num: 1 };
+      return { label: "Không có nguy cơ", level: "success", num: 0 };
+    }
+
+    function calcPainRisk(score) {
+      if (score === 0) return { label: "Không đau", level: "success", num: 0 };
+      if (score <= 3) return { label: "Đau nhẹ", level: "success", num: 1 };
+      if (score <= 6) return { label: "Đau vừa", level: "warning", num: 2 };
+      return { label: "Đau nặng", level: "danger", num: 4 };
+    }
+
+    function calcVipRisk(score) {
+      if (score === 0) return { label: "Bình thường", action: "Theo dõi thường quy", level: "success", num: 0 };
+      if (score === 1) return { label: "Dấu hiệu sớm", action: "Theo dõi sát vị trí", level: "warning", num: 1 };
+      if (score === 2) return { label: "Viêm TM sớm", action: "Rút/đổi catheter mới", level: "danger", num: 2 };
+      if (score === 3) return { label: "Viêm TM vừa", action: "Rút catheter, báo BS", level: "danger", num: 3 };
+      return { label: "Viêm tĩnh mạch nặng", action: "Rút catheter, báo BS khẩn cấp", level: "danger", num: 4 };
+    }
+
+    function calcMorseRisk(score) {
+      if (score <= 24) return { label: "Nguy cơ thấp", level: "success", num: 0 };
+      if (score <= 44) return { label: "Nguy cơ trung bình", level: "warning", num: 2 };
+      return { label: "Nguy cơ cao", level: "danger", num: 4 };
+    }
+
+    function calcOverallPatientRisk(bed) {
+      let riskCount = 0;
+      let hasSevere = false;
+
+      if (bed.braden <= 12) { riskCount++; if (bed.braden <= 9) hasSevere = true; }
+      if (bed.pain >= 7) { riskCount++; hasSevere = true; }
+      if (bed.vip >= 2) { riskCount++; hasSevere = true; }
+      if (bed.morse >= 45) { riskCount++; }
+
+      if (riskCount >= 2 || hasSevere) {
+        return { label: "Cần can thiệp khẩn (≥2 nguy cơ)", statusClass: "status-danger", badgeClass: "danger", count: riskCount };
+      } else if (riskCount === 1) {
+        return { label: "Theo dõi sát (1 chỉ số nguy cơ)", statusClass: "status-warning", badgeClass: "warning", count: riskCount };
+      } else {
+        return { label: "Ổn định — An toàn", statusClass: "status-safe", badgeClass: "success", count: 0 };
+      }
+    }
+
+    /* ================= 5. QUẢN LÝ DỮ LIỆU & LOCAL STORAGE ================= */
+    const STORAGE_KEY = "BV_DONGNAI_NEWS_APP_DATA_V1";
+    let appState = {
+      currentDept: "Khoa Nội Thần kinh",
+      beds: [],
+      history: []
+    };
+    let currentSelectedBedId = 1;
+
+    function generateInitialBeds() {
+      const samplePatients = [
+        { id: 1, name: "Nguyễn Văn An", age: "68T", gender: "Nam", code: "BA-01", nurse: "Phạm Thị Thu Thủy (THUYPTT)", braden: 11, pain: 8, vip: 2, morse: 55, updated: "07:30 hôm nay" },
+        { id: 2, name: "Lê Thị Hoa", age: "74T", gender: "Nữ", code: "BA-02", nurse: "Nguyễn Gia Kiên (KIENNG)", braden: 13, pain: 2, vip: 0, morse: 30, updated: "07:45 hôm nay" },
+        { id: 3, name: "Trần Đình Trọng", age: "52T", gender: "Nam", code: "BA-03", nurse: "Nguyễn Thị Lệ (LENT)", braden: 20, pain: 1, vip: 0, morse: 15, updated: "08:00 hôm nay" },
+        { id: 4, name: "Phạm Hồng Phúc", age: "81T", gender: "Nam", code: "BA-04", nurse: "Lê Thị Trúc Quy (QUYLTT)", braden: 9, pain: 7, vip: 3, morse: 65, updated: "08:15 hôm nay" },
+        { id: 5, name: "Hoàng Thị Mai", age: "63T", gender: "Nữ", code: "BA-05", nurse: "Phạm Thị Thu Thủy (THUYPTT)", braden: 15, pain: 5, vip: 1, morse: 25, updated: "08:20 hôm nay" },
+        { id: 6, name: "Vũ Quang Dũng", age: "59T", gender: "Nam", code: "BA-06", nurse: "Nguyễn Gia Kiên (KIENNG)", braden: 18, pain: 0, vip: 0, morse: 10, updated: "08:30 hôm nay" },
+        { id: 7, name: "Đỗ Thị Kim", age: "77T", gender: "Nữ", code: "BA-07", nurse: "Nguyễn Thị Lệ (LENT)", braden: 12, pain: 4, vip: 1, morse: 50, updated: "08:45 hôm nay" },
+        { id: 8, name: "Ngô Văn Hùng", age: "48T", gender: "Nam", code: "BA-08", nurse: "Phạm Thị Thu Thủy (THUYPTT)", braden: 22, pain: 3, vip: 0, morse: 20, updated: "09:00 hôm nay" },
+        { id: 9, name: "Bùi Thị Lan", age: "70T", gender: "Nữ", code: "BA-09", nurse: "Lê Thị Trúc Quy (QUYLTT)", braden: 10, pain: 6, vip: 2, morse: 45, updated: "09:10 hôm nay" },
+        { id: 10, name: "Đặng Minh Tâm", age: "66T", gender: "Nam", code: "BA-10", nurse: "Nguyễn Gia Kiên (KIENNG)", braden: 14, pain: 1, vip: 0, morse: 15, updated: "09:20 hôm nay" },
+        { id: 11, name: "Dương Quốc Bảo", age: "83T", gender: "Nam", code: "BA-11", nurse: "Phạm Thị Thu Thủy (THUYPTT)", braden: 8, pain: 9, vip: 1, morse: 70, updated: "09:30 hôm nay" },
+        { id: 12, name: "Lý Mỹ Dung", age: "55T", gender: "Nữ", code: "BA-12", nurse: "Nguyễn Thị Lệ (LENT)", braden: 19, pain: 2, vip: 0, morse: 20, updated: "09:40 hôm nay" },
+        { id: 13, name: "Trịnh Văn Toàn", age: "61T", gender: "Nam", code: "BA-13", nurse: "Lê Thị Trúc Quy (QUYLTT)", braden: 16, pain: 3, vip: 0, morse: 25, updated: "09:50 hôm nay" },
+        { id: 14, name: "Võ Thị Bích", age: "72T", gender: "Nữ", code: "BA-14", nurse: "Nguyễn Gia Kiên (KIENNG)", braden: 12, pain: 7, vip: 0, morse: 45, updated: "10:00 hôm nay" },
+        { id: 15, name: "Phan Văn Nam", age: "69T", gender: "Nam", code: "BA-15", nurse: "Phạm Thị Thu Thủy (THUYPTT)", braden: 21, pain: 0, vip: 0, morse: 10, updated: "10:15 hôm nay" },
+        { id: 16, name: "Lâm Thu Thảo", age: "58T", gender: "Nữ", code: "BA-16", nurse: "Nguyễn Thị Lệ (LENT)", braden: 17, pain: 2, vip: 1, morse: 35, updated: "10:20 hôm nay" },
+        { id: 17, name: "Tạ Đình Hậu", age: "79T", gender: "Nam", code: "BA-17", nurse: "Lê Thị Trúc Quy (QUYLTT)", braden: 10, pain: 8, vip: 2, morse: 60, updated: "10:30 hôm nay" },
+        { id: 18, name: "Hồ Thị Thu", age: "64T", gender: "Nữ", code: "BA-18", nurse: "Nguyễn Gia Kiên (KIENNG)", braden: 19, pain: 1, vip: 0, morse: 15, updated: "10:45 hôm nay" },
+        { id: 19, name: "Mai Văn Kiên", age: "53T", gender: "Nam", code: "BA-19", nurse: "Phạm Thị Thu Thủy (THUYPTT)", braden: 22, pain: 0, vip: 0, morse: 5, updated: "11:00 hôm nay" },
+        { id: 20, name: "Đoàn Thị Vân", age: "75T", gender: "Nữ", code: "BA-20", nurse: "Lê Thị Trúc Quy (QUYLTT)", braden: 13, pain: 5, vip: 0, morse: 40, updated: "11:15 hôm nay" }
+      ];
+
+      return samplePatients.map(b => ({
+        ...b,
+        dept: "Khoa Nội Thần kinh",
+        bradenDetails: { sensory: 2, moisture: 2, activity: 2, mobility: 2, nutrition: 2, friction: 1 },
+        morseDetails: { history: b.morse >= 45 ? 25 : 0, secondary: 15, aid: b.morse >= 45 ? 15 : 0, iv: 20, gait: 10, mental: 0 }
+      }));
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          appState = JSON.parse(raw);
+        } else {
+          appState.beds = generateInitialBeds();
+          appState.history = [
+            { time: "07:30 13/10", bed: 1, name: "Nguyễn Văn An", braden: 11, pain: 8, vip: 2, morse: 55, overall: "Cần can thiệp khẩn", nurse: "Phạm Thị Thu Thủy (THUYPTT)" },
+            { time: "08:15 13/10", bed: 4, name: "Phạm Hồng Phúc", braden: 9, pain: 7, vip: 3, morse: 65, overall: "Cần can thiệp khẩn", nurse: "Lê Thị Trúc Quy (QUYLTT)" },
+            { time: "09:30 13/10", bed: 11, name: "Dương Quốc Bảo", braden: 8, pain: 9, vip: 1, morse: 70, overall: "Cần can thiệp khẩn", nurse: "Phạm Thị Thu Thủy (THUYPTT)" }
+          ];
+          saveState();
+        }
+      } catch (e) {
+        console.error("Lỗi đọc localStorage:", e);
+        appState.beds = generateInitialBeds();
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.error("Lỗi ghi localStorage:", e);
+      }
+    }
+
+    /* ================= 6. ĐIỀU HƯỚNG VIEW ================= */
+    function switchView(viewName) {
+      document.querySelectorAll(".view-section").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".nav-tab").forEach(el => el.classList.remove("active"));
+
+      const targetView = document.getElementById("view-" + viewName);
+      if (targetView) targetView.classList.add("active");
+
+      const targetTab = document.querySelector(`.nav-tab[data-view="${viewName}"]`);
+      if (targetTab) targetTab.classList.add("active");
+
+      if (viewName === "dashboard") {
+        renderDashboard();
+      } else if (viewName === "patients") {
+        renderPatientsTable();
+      } else if (viewName === "reports") {
+        populatePrintSelect();
+      } else if (viewName === "accounts") {
+        renderPilotAccountsTable();
+      }
+    }
+
+    function showToast(msg, isSuccess = true) {
+      const toast = document.getElementById("toastNotification");
+      const text = document.getElementById("toastMessage");
+      text.innerText = msg;
+      toast.className = "toast show " + (isSuccess ? "success" : "");
+      setTimeout(() => { toast.classList.remove("show"); }, 3500);
+    }
+
+    /* ================= 7. RENDER DASHBOARD & BED GRID ================= */
+    function renderDashboard() {
+      const beds = appState.beds;
+      const totalBeds = beds.length || 20;
+
+      const bradenHigh = beds.filter(b => b.braden <= 12).length;
+      const painHigh = beds.filter(b => b.pain >= 7).length;
+      const vipHigh = beds.filter(b => b.vip >= 2).length;
+      const morseHigh = beds.filter(b => b.morse >= 45).length;
+
+      const pct = (cnt) => Math.round((cnt / totalBeds) * 100);
+
+      document.getElementById("kpi-braden-val").innerText = `${bradenHigh}/${totalBeds}`;
+      document.getElementById("kpi-braden-pct").innerText = `${pct(bradenHigh)}% NB nguy cơ cao`;
+      document.getElementById("kpi-braden-bar").style.width = `${Math.min(100, pct(bradenHigh))}%`;
+
+      document.getElementById("kpi-pain-val").innerText = `${painHigh}/${totalBeds}`;
+      document.getElementById("kpi-pain-pct").innerText = `${pct(painHigh)}% NB đau nặng`;
+      document.getElementById("kpi-pain-bar").style.width = `${Math.min(100, pct(painHigh))}%`;
+
+      document.getElementById("kpi-vip-val").innerText = `${vipHigh}/${totalBeds}`;
+      document.getElementById("kpi-vip-pct").innerText = `${pct(vipHigh)}% NB viêm TM`;
+      document.getElementById("kpi-vip-bar").style.width = `${Math.min(100, pct(vipHigh))}%`;
+
+      document.getElementById("kpi-morse-val").innerText = `${morseHigh}/${totalBeds}`;
+      document.getElementById("kpi-morse-pct").innerText = `${pct(morseHigh)}% NB nguy cơ cao`;
+      document.getElementById("kpi-morse-bar").style.width = `${Math.min(100, pct(morseHigh))}%`;
+
+      const gridContainer = document.getElementById("bedGridContainer");
+      gridContainer.innerHTML = "";
+
+      beds.forEach(bed => {
+        const risk = calcOverallPatientRisk(bed);
+        const bedDiv = document.createElement("div");
+        bedDiv.className = `bed-item ${risk.statusClass} ${bed.id === currentSelectedBedId ? 'active-selected' : ''}`;
+        bedDiv.innerHTML = `
+          <div class="bed-status-indicator"></div>
+          <div class="bed-number" style="margin-top:6px;">G${String(bed.id).padStart(2, '0')}</div>
+          <div class="bed-patient" title="${bed.name}">${bed.name}</div>
+        `;
+        bedDiv.onclick = () => selectBedOnDashboard(bed.id);
+        gridContainer.appendChild(bedDiv);
+      });
+
+      renderBedDetailPanel(currentSelectedBedId);
+      renderPriorityTable();
+      renderTrendChart();
+    }
+
+    function selectBedOnDashboard(bedId) {
+      currentSelectedBedId = bedId;
+      document.querySelectorAll(".bed-item").forEach((el, idx) => {
+        el.classList.toggle("active-selected", appState.beds[idx]?.id === bedId);
+      });
+      renderBedDetailPanel(bedId);
+    }
+
+    function renderBedDetailPanel(bedId) {
+      const bed = appState.beds.find(b => b.id === bedId) || appState.beds[0];
+      if (!bed) return;
+
+      const overall = calcOverallPatientRisk(bed);
+      document.getElementById("panel-bed-title").innerText = `Giường ${String(bed.id).padStart(2, '0')}`;
+      document.getElementById("panel-patient-sub").innerText = `BN: ${bed.name} (${bed.age || '—'} · ${bed.gender || '—'}) · ${bed.code || ''}`;
+      
+      const overallBadge = document.getElementById("panel-overall-badge");
+      overallBadge.className = `risk-badge ${overall.badgeClass}`;
+      overallBadge.innerText = overall.label;
+
+      document.getElementById("panel-nurse-info").innerText = `ĐD đánh giá: ${bed.nurse || '—'} · Cập nhật: ${bed.updated || 'Gần đây'}`;
+
+      const bRisk = calcBradenRisk(bed.braden);
+      document.getElementById("panel-val-braden").innerText = `${bed.braden} điểm`;
+      const bBadge = document.getElementById("panel-badge-braden");
+      bBadge.className = `risk-badge ${bRisk.level}`;
+      bBadge.innerText = bRisk.label;
+
+      const pRisk = calcPainRisk(bed.pain);
+      document.getElementById("panel-val-pain").innerText = `${bed.pain}/10 điểm`;
+      const pBadge = document.getElementById("panel-badge-pain");
+      pBadge.className = `risk-badge ${pRisk.level}`;
+      pBadge.innerText = pRisk.label;
+
+      const vRisk = calcVipRisk(bed.vip);
+      document.getElementById("panel-val-vip").innerText = `VIP ${bed.vip}`;
+      const vBadge = document.getElementById("panel-badge-vip");
+      vBadge.className = `risk-badge ${vRisk.level}`;
+      vBadge.innerText = vRisk.label;
+
+      const mRisk = calcMorseRisk(bed.morse);
+      document.getElementById("panel-val-morse").innerText = `${bed.morse} điểm`;
+      const mBadge = document.getElementById("panel-badge-morse");
+      mBadge.className = `risk-badge ${mRisk.level}`;
+      mBadge.innerText = mRisk.label;
+
+      const actions = [];
+      if (bed.braden <= 12) actions.push("• Xoay trở tư thế mỗi 2 giờ, sử dụng đệm giảm áp khí/nước.");
+      if (bed.pain >= 7) actions.push("• Đánh giá lại đau, báo Bác sĩ xem xét điều chỉnh thuốc giảm đau.");
+      if (bed.vip >= 2) actions.push(`• RÚT CATHETER NGOẠI VI và thay vị trí mới (${vRisk.action}).`);
+      if (bed.morse >= 45) actions.push("• Kéo 2 thanh chắn giường, biển cảnh báo té ngã, hỗ trợ khi đi vệ sinh.");
+      if (actions.length === 0) actions.push("• Tiếp tục chăm sóc và theo dõi thường quy theo y lệnh.");
+
+      document.getElementById("panel-action-suggest").innerHTML = actions.join("<br>");
+    }
+
+    function renderPriorityTable() {
+      const tbody = document.getElementById("priorityTableBody");
+      tbody.innerHTML = "";
+
+      const dangerBeds = appState.beds
+        .map(b => ({ bed: b, risk: calcOverallPatientRisk(b) }))
+        .filter(item => item.risk.count > 0)
+        .sort((a, b) => b.risk.count - a.risk.count);
+
+      document.getElementById("priorityCountBadge").innerText = `${dangerBeds.length} Giường`;
+
+      if (dangerBeds.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px;">Tất cả người bệnh hiện đang trong giới hạn an toàn.</td></tr>`;
+        return;
+      }
+
+      dangerBeds.forEach(({ bed, risk }) => {
+        const tr = document.createElement("tr");
+        const risks = [];
+        let action = "";
+        if (bed.braden <= 12) { risks.push(`<span class="risk-badge danger">Braden ${bed.braden}đ</span>`); action = "Xoay trở 2h, đệm hơi"; }
+        if (bed.pain >= 7) { risks.push(`<span class="risk-badge danger">Đau ${bed.pain}/10</span>`); if (!action) action = "Đánh giá lại đau, báo BS"; }
+        if (bed.vip >= 2) { risks.push(`<span class="risk-badge danger">VIP ${bed.vip}</span>`); if (!action) action = "Rút/đổi catheter TM"; }
+        if (bed.morse >= 45) { risks.push(`<span class="risk-badge danger">Morse ${bed.morse}đ</span>`); if (!action) action = "Chắn giường, trợ giúp đi lại"; }
+
+        tr.innerHTML = `
+          <td><b>G${String(bed.id).padStart(2, '0')}</b></td>
+          <td><b>${bed.name}</b> <small style="color:var(--text-muted);">(${bed.age})</small></td>
+          <td><div style="display:flex;gap:4px;flex-wrap:wrap;">${risks.join(" ")}</div></td>
+          <td style="color:#0f766e;font-weight:600;">${action}</td>
+          <td>
+            <button class="nav-tab" style="padding:4px 8px;font-size:11px;" onclick="startNewAssessment(${bed.id})">Đánh giá mới</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderTrendChart() {
+      const container = document.getElementById("trendChartContainer");
+      const weeks = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"];
+      const series = [
+        { name: "Braden", color: "#2563eb", data: [22, 20, 18, 16, 14, 12, 11, 10] },
+        { name: "NRS", color: "#9333ea", data: [30, 27, 24, 22, 18, 16, 14, 12] },
+        { name: "VIP", color: "#0d9488", data: [18, 16, 14, 11, 9, 8, 6, 5] },
+        { name: "Morse", color: "#ea580c", data: [34, 32, 29, 26, 24, 21, 19, 17] }
+      ];
+
+      const w = 450, h = 200, padL = 35, padR = 15, padT = 15, padB = 25;
+      const chartW = w - padL - padR;
+      const chartH = h - padT - padB;
+
+      let svg = `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:100%;">`;
+      for (let yVal = 0; yVal <= 40; yVal += 10) {
+        const yPos = padT + chartH - (yVal / 40) * chartH;
+        svg += `<line x1="${padL}" y1="${yPos}" x2="${w - padR}" y2="${yPos}" stroke="#e2e8f0" stroke-width="1" />`;
+        svg += `<text x="${padL - 6}" y="${yPos + 4}" fill="#94a3b8" font-size="9" text-anchor="end">${yVal}%</text>`;
+      }
+
+      weeks.forEach((wk, i) => {
+        const xPos = padL + (i / (weeks.length - 1)) * chartW;
+        svg += `<text x="${xPos}" y="${h - 6}" fill="#64748b" font-size="10" text-anchor="middle">${wk}</text>`;
+      });
+
+      series.forEach(s => {
+        const points = s.data.map((val, i) => {
+          const x = padL + (i / (weeks.length - 1)) * chartW;
+          const y = padT + chartH - (val / 40) * chartH;
+          return `${x},${y}`;
+        }).join(" ");
+
+        svg += `<polyline fill="none" stroke="${s.color}" stroke-width="2.5" points="${points}" stroke-linecap="round" stroke-linejoin="round" />`;
+
+        s.data.forEach((val, i) => {
+          const x = padL + (i / (weeks.length - 1)) * chartW;
+          const y = padT + chartH - (val / 40) * chartH;
+          svg += `<circle cx="${x}" cy="${y}" r="3" fill="${s.color}" />`;
+        });
+      });
+
+      svg += `</svg>`;
+      container.innerHTML = svg;
+    }
+
+    /* ================= 8. FORM ĐÁNH GIÁ (ASSESSMENT FORM) ================= */
+    let isFormEditMode = false;
+
+    function getBlankFormState() {
+      return {
+        braden: { sensory: null, moisture: null, activity: null, mobility: null, nutrition: null, friction: null },
+        pain: null,
+        vip: null,
+        morse: { history: null, secondary: null, aid: null, iv: null, gait: null, mental: null }
+      };
+    }
+
+    let formState = getBlankFormState();
+
+    function initFormElements() {
+      const bedSelect = document.getElementById("form-bed");
+      if (bedSelect && bedSelect.options.length === 0) {
+        for (let i = 1; i <= 20; i++) {
+          const opt = document.createElement("option");
+          opt.value = i;
+          opt.text = `Giường ${String(i).padStart(2, '0')}`;
+          bedSelect.appendChild(opt);
+        }
+      }
+
+      // Braden items
+      const bContainer = document.getElementById("bradenQuestionsContainer");
+      bContainer.innerHTML = "";
+      BRADEN_ITEMS.forEach(item => {
+        const qBlock = document.createElement("div");
+        qBlock.className = "question-block";
+        qBlock.innerHTML = `
+          <div class="question-label">${item.label}</div>
+          <div class="question-desc">${item.sub}</div>
+          <div class="options-grid" id="braden-q-${item.key}"></div>
+        `;
+        bContainer.appendChild(qBlock);
+
+        const optsContainer = qBlock.querySelector(`#braden-q-${item.key}`);
+        item.options.forEach(opt => {
+          const isSelected = (formState.braden && formState.braden[item.key] === opt.v);
+          const optDiv = document.createElement("div");
+          optDiv.className = `option-item ${isSelected ? 'selected' : ''}`;
+          optDiv.id = `opt-braden-${item.key}-${opt.v}`;
+          optDiv.innerHTML = `
+            <input type="radio" class="option-radio" name="braden_${item.key}" value="${opt.v}" ${isSelected ? 'checked' : ''}>
+            <div class="option-content">
+              <span class="option-score-tag">${opt.v} điểm</span>
+              <div class="option-title">${opt.t}</div>
+            </div>
+          `;
+          optDiv.onclick = () => selectBradenOption(item.key, opt.v);
+          optsContainer.appendChild(optDiv);
+        });
+      });
+
+      // Pain Quick Buttons
+      const painBtnContainer = document.getElementById("painQuickButtons");
+      if (painBtnContainer) {
+        painBtnContainer.innerHTML = "";
+        for (let i = 0; i <= 10; i++) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = `pain-num-btn ${formState.pain === i ? 'active' : ''}`;
+          btn.dataset.val = i;
+          btn.innerText = i;
+          btn.onclick = () => onPainSliderChange(i);
+          painBtnContainer.appendChild(btn);
+        }
+      }
+      const slider = document.getElementById("painSlider");
+      if (slider) {
+        slider.value = (formState.pain !== null && formState.pain !== undefined) ? formState.pain : 0;
+      }
+
+      // VIP items
+      const vContainer = document.getElementById("vipOptionsContainer");
+      vContainer.innerHTML = "";
+      VIP_OPTIONS.forEach(opt => {
+        const isSelected = (formState.vip !== null && formState.vip !== undefined && formState.vip === opt.v);
+        const optDiv = document.createElement("div");
+        optDiv.className = `option-item ${isSelected ? 'selected' : ''}`;
+        optDiv.id = `opt-vip-${opt.v}`;
+        optDiv.innerHTML = `
+          <input type="radio" class="option-radio" name="vip_radio" value="${opt.v}" ${isSelected ? 'checked' : ''}>
+          <div class="option-content">
+            <span class="option-score-tag">VIP ${opt.v}</span>
+            <div class="option-title">${opt.t}</div>
+            <div class="option-action">→ Khuyến cáo: ${opt.action}</div>
+          </div>
+        `;
+        optDiv.onclick = () => selectVipOption(opt.v);
+        vContainer.appendChild(optDiv);
+      });
+
+      // Morse items
+      const mContainer = document.getElementById("morseQuestionsContainer");
+      mContainer.innerHTML = "";
+      MORSE_ITEMS.forEach(item => {
+        const qBlock = document.createElement("div");
+        qBlock.className = "question-block";
+        qBlock.innerHTML = `
+          <div class="question-label">${item.label}</div>
+          <div class="options-grid" id="morse-q-${item.key}"></div>
+        `;
+        mContainer.appendChild(qBlock);
+
+        const optsContainer = qBlock.querySelector(`#morse-q-${item.key}`);
+        item.options.forEach(opt => {
+          const isSelected = (formState.morse && formState.morse[item.key] === opt.v);
+          const optDiv = document.createElement("div");
+          optDiv.className = `option-item ${isSelected ? 'selected' : ''}`;
+          optDiv.id = `opt-morse-${item.key}-${opt.v}`;
+          optDiv.innerHTML = `
+            <input type="radio" class="option-radio" name="morse_${item.key}" value="${opt.v}" ${isSelected ? 'checked' : ''}>
+            <div class="option-content">
+              <span class="option-score-tag">+${opt.v} điểm</span>
+              <div class="option-title">${opt.t}</div>
+            </div>
+          `;
+          optDiv.onclick = () => selectMorseOption(item.key, opt.v);
+          optsContainer.appendChild(optDiv);
+        });
+      });
+
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      const evalTimeInput = document.getElementById("form-eval-time");
+      if (evalTimeInput && !evalTimeInput.value) {
+        evalTimeInput.value = now.toISOString().slice(0, 16);
+      }
+    }
+
+    function switchScaleTab(scaleName) {
+      document.querySelectorAll(".scale-tab-btn").forEach(b => b.classList.toggle("active", b.getAttribute("data-scale") === scaleName));
+      document.querySelectorAll(".scale-panel").forEach(p => p.classList.toggle("active", p.id === "panel-scale-" + scaleName));
+    }
+
+    function selectBradenOption(key, val) {
+      if (!formState.braden) formState.braden = {};
+      formState.braden[key] = val;
+      const itemDef = BRADEN_ITEMS.find(i => i.key === key);
+      if (itemDef) {
+        itemDef.options.forEach(o => {
+          const el = document.getElementById(`opt-braden-${key}-${o.v}`);
+          if (el) {
+            el.classList.toggle("selected", o.v === val);
+            const r = el.querySelector("input");
+            if (r) r.checked = (o.v === val);
+          }
+        });
+      }
+      recalcFormScores();
+    }
+
+    function selectVipOption(val) {
+      formState.vip = val;
+      VIP_OPTIONS.forEach(o => {
+        const el = document.getElementById(`opt-vip-${o.v}`);
+        if (el) {
+          el.classList.toggle("selected", o.v === val);
+          const r = el.querySelector("input");
+          if (r) r.checked = (o.v === val);
+        }
+      });
+      recalcFormScores();
+    }
+
+    function selectMorseOption(key, val) {
+      if (!formState.morse) formState.morse = {};
+      formState.morse[key] = val;
+      const itemDef = MORSE_ITEMS.find(i => i.key === key);
+      if (itemDef) {
+        itemDef.options.forEach(o => {
+          const el = document.getElementById(`opt-morse-${key}-${o.v}`);
+          if (el) {
+            el.classList.toggle("selected", o.v === val);
+            const r = el.querySelector("input");
+            if (r) r.checked = (o.v === val);
+          }
+        });
+      }
+      recalcFormScores();
+    }
+
+    function onPainSliderChange(val) {
+      formState.pain = parseInt(val);
+      const slider = document.getElementById("painSlider");
+      if (slider) slider.value = val;
+      recalcFormScores();
+    }
+
+    function recalcFormScores() {
+      // 1. Braden
+      const bradenAnswered = BRADEN_ITEMS.filter(i => formState.braden && formState.braden[i.key] !== null && formState.braden[i.key] !== undefined).length;
+      const tabBraden = document.getElementById("tab-score-braden");
+      const bBadge = document.getElementById("braden-risk-badge-live");
+      let bradenTotal = 0;
+
+      if (bradenAnswered === 0) {
+        tabBraden.innerText = "—";
+        bBadge.className = "risk-badge";
+        bBadge.innerText = "Chưa đánh giá (0/6 tiêu chí)";
+      } else if (bradenAnswered < BRADEN_ITEMS.length) {
+        tabBraden.innerText = `${bradenAnswered}/6`;
+        bBadge.className = "risk-badge warning";
+        bBadge.innerText = `Đang đánh giá (${bradenAnswered}/6 tiêu chí)`;
+      } else {
+        bradenTotal = Object.values(formState.braden).reduce((a, b) => a + Number(b || 0), 0);
+        const bRisk = calcBradenRisk(bradenTotal);
+        tabBraden.innerText = `${bradenTotal}đ`;
+        bBadge.className = `risk-badge ${bRisk.level}`;
+        bBadge.innerText = `${bradenTotal} điểm — ${bRisk.label}`;
+      }
+
+      // 2. Pain
+      const tabPain = document.getElementById("tab-score-pain");
+      const painDisplay = document.getElementById("painScoreDisplay");
+      const pBadge = document.getElementById("painRiskBadgeLive");
+
+      if (formState.pain === null || formState.pain === undefined) {
+        tabPain.innerText = "—";
+        painDisplay.innerText = "—";
+        painDisplay.style.color = "var(--text-muted)";
+        pBadge.className = "risk-badge";
+        pBadge.innerText = "Chưa đánh giá";
+        document.querySelectorAll(".pain-num-btn").forEach(btn => btn.classList.remove("active"));
+      } else {
+        const painVal = formState.pain;
+        const pRisk = calcPainRisk(painVal);
+        tabPain.innerText = `${painVal}/10`;
+        painDisplay.innerText = painVal;
+        painDisplay.style.color = painVal >= 7 ? "var(--danger)" : painVal >= 4 ? "var(--warning)" : "var(--success)";
+        pBadge.className = `risk-badge ${pRisk.level}`;
+        pBadge.innerText = pRisk.label;
+        document.querySelectorAll(".pain-num-btn").forEach(btn => {
+          btn.classList.toggle("active", parseInt(btn.dataset.val) === painVal);
+        });
+      }
+
+      // 3. VIP
+      const tabVip = document.getElementById("tab-score-vip");
+      const vBadge = document.getElementById("vip-risk-badge-live");
+
+      if (formState.vip === null || formState.vip === undefined) {
+        tabVip.innerText = "—";
+        vBadge.className = "risk-badge";
+        vBadge.innerText = "Chưa đánh giá";
+      } else {
+        const vipVal = formState.vip;
+        const vRisk = calcVipRisk(vipVal);
+        tabVip.innerText = `VIP ${vipVal}`;
+        vBadge.className = `risk-badge ${vRisk.level}`;
+        vBadge.innerText = `VIP ${vipVal} — ${vRisk.label}`;
+      }
+
+      // 4. Morse
+      const morseAnswered = MORSE_ITEMS.filter(i => formState.morse && formState.morse[i.key] !== null && formState.morse[i.key] !== undefined).length;
+      const tabMorse = document.getElementById("tab-score-morse");
+      const mBadge = document.getElementById("morse-risk-badge-live");
+      let morseTotal = 0;
+
+      if (morseAnswered === 0) {
+        tabMorse.innerText = "—";
+        mBadge.className = "risk-badge";
+        mBadge.innerText = "Chưa đánh giá (0/6 tiêu chí)";
+      } else if (morseAnswered < MORSE_ITEMS.length) {
+        tabMorse.innerText = `${morseAnswered}/6`;
+        mBadge.className = "risk-badge warning";
+        mBadge.innerText = `Đang đánh giá (${morseAnswered}/6 tiêu chí)`;
+      } else {
+        morseTotal = Object.values(formState.morse).reduce((a, b) => a + Number(b || 0), 0);
+        const mRisk = calcMorseRisk(morseTotal);
+        tabMorse.innerText = `${morseTotal}đ`;
+        mBadge.className = `risk-badge ${mRisk.level}`;
+        mBadge.innerText = `${morseTotal} điểm — ${mRisk.label}`;
+      }
+
+      // 5. Overall preview
+      const liveBadge = document.getElementById("form-overall-badge-live");
+      const totalCompletedScales = (bradenAnswered === BRADEN_ITEMS.length ? 1 : 0) +
+                                   (formState.pain !== null && formState.pain !== undefined ? 1 : 0) +
+                                   (formState.vip !== null && formState.vip !== undefined ? 1 : 0) +
+                                   (morseAnswered === MORSE_ITEMS.length ? 1 : 0);
+
+      if (totalCompletedScales < 4) {
+        liveBadge.className = "risk-badge";
+        liveBadge.innerText = `Chưa hoàn tất (${totalCompletedScales}/4 thang điểm)`;
+      } else {
+        const mockBed = { braden: bradenTotal, pain: formState.pain, vip: formState.vip, morse: morseTotal };
+        const overall = calcOverallPatientRisk(mockBed);
+        liveBadge.className = `risk-badge ${overall.badgeClass}`;
+        liveBadge.innerText = overall.label;
+      }
+    }
+
+    function loadBedAdminInfo(bedId) {
+      const existing = appState.beds.find(b => b.id === parseInt(bedId));
+      if (existing) {
+        document.getElementById("form-dept").value = existing.dept || appState.currentDept || "Khoa Nội Thần kinh";
+        document.getElementById("form-patient-name").value = existing.name || "";
+        document.getElementById("form-patient-age").value = existing.age || "";
+        document.getElementById("form-patient-gender").value = existing.gender || "Nam";
+        document.getElementById("form-patient-code").value = existing.code || `BA-${bedId}`;
+      } else {
+        document.getElementById("form-patient-name").value = "";
+        document.getElementById("form-patient-age").value = "";
+        document.getElementById("form-patient-gender").value = "Nam";
+        document.getElementById("form-patient-code").value = `BA-${bedId}`;
+      }
+
+      if (currentUser) {
+        document.getElementById("form-nurse-name").value = `${currentUser.name} (${currentUser.username})`;
+      } else {
+        document.getElementById("form-nurse-name").value = "";
+      }
+
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      document.getElementById("form-eval-time").value = now.toISOString().slice(0, 16);
+    }
+
+    function onFormBedSelected() {
+      const bedId = parseInt(document.getElementById("form-bed").value);
+      loadBedAdminInfo(bedId);
+
+      if (isFormEditMode) {
+        const existing = appState.beds.find(b => b.id === bedId);
+        if (existing) {
+          formState.braden = existing.bradenDetails ? { ...existing.bradenDetails } : { sensory: null, moisture: null, activity: null, mobility: null, nutrition: null, friction: null };
+          formState.vip = (existing.vip !== undefined && existing.vip !== null) ? existing.vip : null;
+          formState.pain = (existing.pain !== undefined && existing.pain !== null) ? existing.pain : null;
+          formState.morse = existing.morseDetails ? { ...existing.morseDetails } : { history: null, secondary: null, aid: null, iv: null, gait: null, mental: null };
+        } else {
+          formState = getBlankFormState();
+        }
+      } else {
+        // Khi tạo phiếu mới: giữ trắng toàn bộ các ô chọn
+        formState = getBlankFormState();
+      }
+
+      initFormElements();
+      recalcFormScores();
+    }
+
+    function startNewAssessment(bedId) {
+      isFormEditMode = false;
+      const targetBedId = parseInt(bedId) || currentSelectedBedId || 1;
+      
+      const bedSelect = document.getElementById("form-bed");
+      if (bedSelect) bedSelect.value = targetBedId;
+
+      // Điền thông tin hành chính bệnh nhân của giường, nhưng điểm số để TRẮNG hoàn toàn
+      loadBedAdminInfo(targetBedId);
+      formState = getBlankFormState();
+
+      // Cập nhật tiêu đề phiếu mới
+      const heading = document.getElementById("formViewHeading");
+      const subheading = document.getElementById("formViewSubHeading");
+      if (heading) heading.innerText = `Phiếu Đánh Giá Mới — Giường ${String(targetBedId).padStart(2, '0')}`;
+      if (subheading) subheading.innerText = "Phiếu mới để trắng hoàn toàn các ô chọn để điều dưỡng đánh giá thực tế";
+
+      initFormElements();
+      recalcFormScores();
+      switchScaleTab("braden");
+      switchView("assessment");
+    }
+
+    function editCurrentSelectedBed() {
+      startNewAssessment(currentSelectedBedId);
+    }
+
+    function onNavAssessmentClicked() {
+      const isFormInProgress = (
+        (formState.braden && Object.values(formState.braden).some(v => v !== null && v !== undefined)) ||
+        (formState.pain !== null && formState.pain !== undefined) ||
+        (formState.vip !== null && formState.vip !== undefined) ||
+        (formState.morse && Object.values(formState.morse).some(v => v !== null && v !== undefined))
+      );
+
+      if (!isFormInProgress) {
+        startNewAssessment(currentSelectedBedId || 1);
+      } else {
+        switchView("assessment");
+      }
+    }
+
+    function loadBedIntoForm(bedId) {
+      isFormEditMode = true;
+      const targetBedId = parseInt(bedId);
+      const bedSelect = document.getElementById("form-bed");
+      if (bedSelect) bedSelect.value = targetBedId;
+
+      const existing = appState.beds.find(b => b.id === targetBedId);
+      if (existing) {
+        loadBedAdminInfo(targetBedId);
+        if (existing.nurse) {
+          document.getElementById("form-nurse-name").value = existing.nurse;
+        }
+
+        formState.braden = existing.bradenDetails ? { ...existing.bradenDetails } : { sensory: null, moisture: null, activity: null, mobility: null, nutrition: null, friction: null };
+        formState.vip = (existing.vip !== undefined && existing.vip !== null) ? existing.vip : null;
+        formState.pain = (existing.pain !== undefined && existing.pain !== null) ? existing.pain : null;
+        formState.morse = existing.morseDetails ? { ...existing.morseDetails } : { history: null, secondary: null, aid: null, iv: null, gait: null, mental: null };
+
+        const heading = document.getElementById("formViewHeading");
+        const subheading = document.getElementById("formViewSubHeading");
+        if (heading) heading.innerText = `Chỉnh Sửa Phiếu Đánh Giá — Giường ${String(targetBedId).padStart(2, '0')}`;
+        if (subheading) subheading.innerText = `Đang xem và sửa lại đánh giá cũ của BN ${existing.name}`;
+
+        initFormElements();
+        recalcFormScores();
+        switchScaleTab("braden");
+        switchView("assessment");
+        showToast(`Đang mở chỉnh sửa đánh giá Giường ${String(targetBedId).padStart(2, '0')}`);
+      }
+    }
+
+    function resetAssessmentForm() {
+      formState = getBlankFormState();
+      initFormElements();
+      recalcFormScores();
+      showToast("Đã làm mới phiếu (toàn bộ ô chọn đã được xóa trắng)");
+    }
+
+    function saveAssessmentForm() {
+      const patientName = document.getElementById("form-patient-name").value.trim();
+      const nurseName = document.getElementById("form-nurse-name").value.trim();
+      const bedId = parseInt(document.getElementById("form-bed").value);
+      const dept = document.getElementById("form-dept").value.trim();
+
+      if (!patientName) {
+        alert("Vui lòng nhập họ tên người bệnh!");
+        document.getElementById("form-patient-name").focus();
+        return;
+      }
+      if (!nurseName) {
+        alert("Vui lòng nhập tên điều dưỡng đánh giá!");
+        document.getElementById("form-nurse-name").focus();
+        return;
+      }
+
+      // Kiểm tra người dùng đã chọn đầy đủ các thang điểm hay chưa
+      const bradenAnswered = BRADEN_ITEMS.filter(i => formState.braden && formState.braden[i.key] !== null && formState.braden[i.key] !== undefined).length;
+      if (bradenAnswered < BRADEN_ITEMS.length) {
+        alert(`Thang điểm Loét tì đè (Braden) còn thiếu ${BRADEN_ITEMS.length - bradenAnswered}/${BRADEN_ITEMS.length} tiêu chí chưa chọn. Vui lòng hoàn thành đủ trước khi lưu!`);
+        switchScaleTab('braden');
+        return;
+      }
+
+      if (formState.pain === null || formState.pain === undefined) {
+        alert("Thang điểm Đau (NRS / VAS) chưa được đánh giá. Vui lòng chọn mức điểm đau (0 - 10)!");
+        switchScaleTab('pain');
+        return;
+      }
+
+      if (formState.vip === null || formState.vip === undefined) {
+        alert("Thang điểm Viêm tĩnh mạch (VIP) chưa được đánh giá. Vui lòng chọn mức điểm VIP!");
+        switchScaleTab('vip');
+        return;
+      }
+
+      const morseAnswered = MORSE_ITEMS.filter(i => formState.morse && formState.morse[i.key] !== null && formState.morse[i.key] !== undefined).length;
+      if (morseAnswered < MORSE_ITEMS.length) {
+        alert(`Thang điểm Té ngã (Morse) còn thiếu ${MORSE_ITEMS.length - morseAnswered}/${MORSE_ITEMS.length} tiêu chí chưa chọn. Vui lòng hoàn thành đủ trước khi lưu!`);
+        switchScaleTab('morse');
+        return;
+      }
+
+      const bradenTotal = Object.values(formState.braden).reduce((a, b) => a + Number(b), 0);
+      const morseTotal = Object.values(formState.morse).reduce((a, b) => a + Number(b), 0);
+
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ${now.getDate()}/${now.getMonth()+1}`;
+
+      const updatedBed = {
+        id: bedId,
+        dept: dept,
+        name: patientName,
+        age: document.getElementById("form-patient-age").value.trim() || "—",
+        gender: document.getElementById("form-patient-gender").value,
+        code: document.getElementById("form-patient-code").value.trim() || `BA-${bedId}`,
+        nurse: nurseName,
+        updated: timeStr,
+        braden: bradenTotal,
+        pain: formState.pain,
+        vip: formState.vip,
+        morse: morseTotal,
+        bradenDetails: { ...formState.braden },
+        morseDetails: { ...formState.morse }
+      };
+
+      const idx = appState.beds.findIndex(b => b.id === bedId);
+      if (idx >= 0) {
+        appState.beds[idx] = updatedBed;
+      } else {
+        appState.beds.push(updatedBed);
+      }
+
+      const overall = calcOverallPatientRisk(updatedBed);
+      appState.history.unshift({
+        time: timeStr,
+        bed: bedId,
+        name: patientName,
+        braden: bradenTotal,
+        pain: formState.pain,
+        vip: formState.vip,
+        morse: morseTotal,
+        overall: overall.label,
+        nurse: nurseName
+      });
+
+      saveState();
+      currentSelectedBedId = bedId;
+      isFormEditMode = false;
+      showToast(`Đã lưu đánh giá cho Giường ${String(bedId).padStart(2,'0')} (${patientName}) thành công!`);
+
+      switchView("dashboard");
+    }
+
+    /* ================= 9. DANH SÁCH & LỊCH SỬ BỆNH NHÂN ================= */
+    function renderPatientsTable() {
+      const search = (document.getElementById("patientSearchInput")?.value || "").toLowerCase();
+      const filter = document.getElementById("patientFilterRisk")?.value || "all";
+      const tbody = document.getElementById("patientsFullTableBody");
+      tbody.innerHTML = "";
+
+      const filtered = appState.beds.filter(b => {
+        const matchesSearch = b.name.toLowerCase().includes(search) || String(b.id).includes(search);
+        if (!matchesSearch) return false;
+
+        const risk = calcOverallPatientRisk(b);
+        if (filter === "danger" && risk.statusClass !== "status-danger") return false;
+        if (filter === "warning" && risk.statusClass !== "status-warning") return false;
+        if (filter === "safe" && risk.statusClass !== "status-safe") return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:24px;color:var(--text-muted);">Không tìm thấy người bệnh nào phù hợp.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(bed => {
+        const overall = calcOverallPatientRisk(bed);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><b>G${String(bed.id).padStart(2, '0')}</b></td>
+          <td><b>${bed.name}</b></td>
+          <td>${bed.age || '—'} / ${bed.gender || '—'}</td>
+          <td><span class="risk-badge ${calcBradenRisk(bed.braden).level}">${bed.braden}đ</span></td>
+          <td><span class="risk-badge ${calcPainRisk(bed.pain).level}">${bed.pain}/10</span></td>
+          <td><span class="risk-badge ${calcVipRisk(bed.vip).level}">VIP ${bed.vip}</span></td>
+          <td><span class="risk-badge ${calcMorseRisk(bed.morse).level}">${bed.morse}đ</span></td>
+          <td><span class="risk-badge ${overall.badgeClass}">${overall.label}</span></td>
+          <td>${bed.nurse || '—'}</td>
+          <td style="color:var(--text-muted);font-size:12px;">${bed.updated || '—'}</td>
+          <td>
+            <div style="display:flex;gap:4px;">
+              <button class="nav-tab" style="padding:4px 8px;font-size:11px;background:#0f766e;color:white;" title="Tạo phiếu đánh giá mới (trắng ô chọn)" onclick="startNewAssessment(${bed.id})">Đánh giá mới</button>
+              <button class="nav-tab" style="padding:4px 8px;font-size:11px;" title="Sửa lại phiếu cũ" onclick="loadBedIntoForm(${bed.id})">Sửa</button>
+              <button class="nav-tab" style="padding:4px 8px;font-size:11px;" onclick="printPatientReport(${bed.id})">In</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const auditTbody = document.getElementById("auditHistoryTableBody");
+      auditTbody.innerHTML = "";
+      document.getElementById("historyLogCount").innerText = `${appState.history.length} lượt ghi nhận`;
+
+      appState.history.slice(0, 15).forEach(h => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="color:var(--text-muted);font-size:12px;">${h.time}</td>
+          <td><b>G${String(h.bed).padStart(2, '0')}</b></td>
+          <td>${h.name}</td>
+          <td>${h.braden}đ</td>
+          <td>${h.pain}/10</td>
+          <td>VIP ${h.vip}</td>
+          <td>${h.morse}đ</td>
+          <td><span class="risk-badge info">${h.overall}</span></td>
+          <td>${h.nurse}</td>
+        `;
+        auditTbody.appendChild(tr);
+      });
+    }
+
+    /* ================= 10. XUẤT EXCEL & IN ẤN A4 ================= */
+    function exportToExcel() {
+      let csvContent = "\uFEFF";
+      csvContent += "Khoa,Giuong,HoVaTen,Tuoi,GioiTinh,MaHoSo,Braden_Diem,Braden_NguyCo,NRS_Dau,VIP_Score,Morse_TeNga,CanhBaoChung,DieuDuong,ThoiGian\n";
+
+      appState.beds.forEach(b => {
+        const bR = calcBradenRisk(b.braden);
+        const overall = calcOverallPatientRisk(b);
+        csvContent += `"${b.dept || appState.currentDept}","G${b.id}","${b.name}","${b.age}","${b.gender}","${b.code}",${b.braden},"${bR.label}",${b.pain},${b.vip},${b.morse},"${overall.label}","${b.nurse}","${b.updated}"\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Bao_Cao_4_Thang_Diem_${appState.currentDept.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Đã tải về tệp báo cáo Excel (.CSV)");
+    }
+
+    function exportPriorityOnlyToExcel() {
+      let csvContent = "\uFEFF";
+      csvContent += "Giuong,HoVaTen,Tuoi,Braden,NRS_Dau,VIP,Morse,GoiYCanThiep,DieuDuong\n";
+
+      const dangerBeds = appState.beds
+        .map(b => ({ bed: b, risk: calcOverallPatientRisk(b) }))
+        .filter(item => item.risk.count > 0);
+
+      dangerBeds.forEach(({ bed }) => {
+        let action = [];
+        if (bed.braden <= 12) action.push("Xoay trở 2h; Đệm giảm áp");
+        if (bed.pain >= 7) action.push("Đánh giá lại đau; Báo BS");
+        if (bed.vip >= 2) action.push("Rút/đổi vị trí catheter ngoại vi");
+        if (bed.morse >= 45) action.push("Kéo thanh chắn giường; Trợ giúp đi lại");
+
+        csvContent += `"G${bed.id}","${bed.name}","${bed.age}",${bed.braden},${bed.pain},${bed.vip},${bed.morse},"${action.join('; ')}","${bed.nurse}"\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Danh_Sach_Nguy_Co_Cao_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Đã tải danh sách nguy cơ cao");
+    }
+
+    function populatePrintSelect() {
+      const select = document.getElementById("printSelectBed");
+      select.innerHTML = "";
+      appState.beds.forEach(b => {
+        const opt = document.createElement("option");
+        opt.value = b.id;
+        opt.text = `Giường ${String(b.id).padStart(2,'0')} - ${b.name}`;
+        select.appendChild(opt);
+      });
+    }
+
+    function printPatientReport(bedId) {
+      const bed = appState.beds.find(b => b.id === parseInt(bedId)) || appState.beds[0];
+      if (!bed) return;
+
+      const overall = calcOverallPatientRisk(bed);
+      const bRisk = calcBradenRisk(bed.braden);
+      const pRisk = calcPainRisk(bed.pain);
+      const vRisk = calcVipRisk(bed.vip);
+      const mRisk = calcMorseRisk(bed.morse);
+
+      const html = `
+        <div class="print-page">
+          <div class="print-header">
+            <h3 style="margin:0; font-size:16pt;">SỞ Y TẾ ĐỒNG NAI — BỆNH VIỆN ĐA KHOA ĐỒNG NAI</h3>
+            <h4 style="margin:4px 0; font-size:14pt; color:#0f766e;">PHIẾU ĐÁNH GIÁ 4 CHỈ SỐ CẢNH BÁO SỚM ĐIỀU DƯỠNG (N-EWS)</h4>
+            <div style="font-size:10pt; color:#555;">(Braden loét tì đè · NRS/VAS đau · VIP Score viêm tĩnh mạch · Morse té ngã)</div>
+          </div>
+
+          <table style="margin-bottom:15px;">
+            <tr>
+              <td><b>Khoa/Phòng:</b> ${bed.dept || appState.currentDept}</td>
+              <td><b>Số Giường:</b> G${String(bed.id).padStart(2, '0')}</td>
+              <td><b>Mã bệnh án:</b> ${bed.code || '—'}</td>
+            </tr>
+            <tr>
+              <td><b>Họ và tên NB:</b> ${bed.name}</td>
+              <td><b>Tuổi:</b> ${bed.age}</td>
+              <td><b>Giới tính:</b> ${bed.gender}</td>
+            </tr>
+            <tr>
+              <td colspan="2"><b>Thời điểm đánh giá:</b> ${bed.updated || 'Hiện tại'}</td>
+              <td><b>Điều dưỡng đánh giá:</b> ${bed.nurse || '—'}</td>
+            </tr>
+          </table>
+
+          <table style="margin-bottom:15px;">
+            <thead>
+              <tr style="background:#f1f5f9;">
+                <th style="width:25%;">Thang điểm</th>
+                <th style="width:15%;">Điểm số</th>
+                <th style="width:25%;">Phân loại nguy cơ</th>
+                <th style="width:35%;">Hướng xử trí / Can thiệp gợi ý</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>1. Braden (Loét tì đè)</b></td>
+                <td><b>${bed.braden} / 23</b></td>
+                <td>${bRisk.label}</td>
+                <td>${bed.braden <= 12 ? 'Xoay trở tư thế mỗi 2h, dùng đệm giảm áp, giữ da khô sạch.' : 'Theo dõi thường quy'}</td>
+              </tr>
+              <tr>
+                <td><b>2. NRS / VAS (Đau)</b></td>
+                <td><b>${bed.pain} / 10</b></td>
+                <td>${pRisk.label}</td>
+                <td>${bed.pain >= 7 ? 'Đau nặng: Báo Bác sĩ điều trị xem xét giảm đau, kiểm tra lại sau can thiệp.' : 'Theo dõi thường quy'}</td>
+              </tr>
+              <tr>
+                <td><b>3. VIP Score (Viêm TM)</b></td>
+                <td><b>VIP ${bed.vip}</b></td>
+                <td>${vRisk.label}</td>
+                <td><b>${vRisk.action}</b></td>
+              </tr>
+              <tr>
+                <td><b>4. Morse Fall (Té ngã)</b></td>
+                <td><b>${bed.morse} / 125</b></td>
+                <td>${mRisk.label}</td>
+                <td>${bed.morse >= 45 ? 'Kéo thanh chắn giường, biển cảnh báo nguy cơ té ngã, hướng dẫn người nhà.' : 'Hướng dẫn an toàn người bệnh'}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="border:1px solid #000; padding:10px; margin-bottom:20px; border-radius:4px;">
+            <b>TỔNG KẾT PHÂN TẦNG NGUY CƠ: </b>
+            <span style="font-weight:700; color:${overall.badgeClass === 'danger' ? '#b91c1c' : '#047857'};">
+              ${overall.label.toUpperCase()}
+            </span>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; margin-top:30px; text-align:center;">
+            <div style="width:40%;">
+              <b>ĐIỀU DƯỠNG TRƯỞNG KHOA</b><br><br><br><br>
+              <i>(Ký và ghi rõ họ tên)</i>
+            </div>
+            <div style="width:40%;">
+              <b>ĐIỀU DƯỠNG ĐÁNH GIÁ</b><br><br><br><br>
+              <b>${bed.nurse || ''}</b>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("printModalContent").innerHTML = html;
+      document.getElementById("printModal").classList.add("active");
+    }
+
+    function closePrintModal() {
+      document.getElementById("printModal").classList.remove("active");
+    }
+
+    /* ================= 11. SAO LƯU & PHỤC HỒI JSON ================= */
+    function backupDataJSON() {
+      const dataToBackup = {
+        appState: appState,
+        accounts: localAccounts
+      };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataToBackup, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `Backup_NEWS_DongNai_${new Date().toISOString().slice(0, 10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("Đã tải về tệp sao lưu JSON");
+    }
+
+    function triggerRestoreJSON() {
+      document.getElementById("restoreFileInput").click();
+    }
+
+    function handleFileRestore(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const restored = JSON.parse(e.target.result);
+          if (restored.appState && Array.isArray(restored.appState.beds)) {
+            appState = restored.appState;
+            if (restored.accounts) {
+              localAccounts = restored.accounts;
+              localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(localAccounts));
+            }
+            saveState();
+            renderDashboard();
+            renderPilotAccountsTable();
+            renderQuickLoginAccounts();
+            showToast("Đã khôi phục dữ liệu thành công!");
+          } else if (Array.isArray(restored.beds)) {
+            appState = restored;
+            saveState();
+            renderDashboard();
+            showToast("Đã khôi phục dữ liệu thành công!");
+          } else {
+            alert("Tệp JSON không đúng định dạng sao lưu.");
+          }
+        } catch (err) {
+          alert("Lỗi đọc tệp JSON: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetToFactoryDefault() {
+      if (confirm("Bạn có chắc muốn đặt lại dữ liệu 20 giường ban đầu? Dữ liệu hiện tại sẽ bị thay thế.")) {
+        appState.beds = generateInitialBeds();
+        localAccounts = [...PILOT_ACCOUNTS];
+        localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(localAccounts));
+        saveState();
+        renderDashboard();
+        renderPilotAccountsTable();
+        renderQuickLoginAccounts();
+        showToast("Đã đặt lại dữ liệu minh họa 20 giường");
+      }
+    }
+
+    function onDepartmentChanged() {
+      appState.currentDept = document.getElementById("currentDeptSelect").value;
+      document.getElementById("form-dept").value = appState.currentDept;
+      renderDashboard();
+      showToast(`Đang xem: ${appState.currentDept}`);
+    }
+
+    /* ================= 12. KHỞI TẠO ỨNG DỤNG (INIT) ================= */
+    window.addEventListener("DOMContentLoaded", () => {
+      loadState();
+      initFormElements();
+      recalcFormScores();
+      renderDashboard();
+      populatePrintSelect();
+      checkExistingLogin();
+    });
+  </script>
+</body>
+</html>
